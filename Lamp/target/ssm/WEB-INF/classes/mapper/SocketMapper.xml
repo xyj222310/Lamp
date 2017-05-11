@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjtse.dao.SocketDao">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+
+    <select id="findById" parameterType="String" resultType="com.yjtse.entity.Socket">
+        SELECT
+        id,
+        socket_id,
+        socket_name,
+        owner_id,
+        status
+        FROM
+        business_socket
+        WHERE
+        socket_id = #{socketId}
+    </select>
+
+    <insert id="addSocket" parameterType="com.yjtse.entity.Socket">
+        insert into business_socket(
+        socket_id,
+        socket_name,
+        owner_id,
+        status)
+        values (#{socketId},#{socketName},#{ownerId},#{status})
+    </insert>
+
+    <update id="updatesocket" parameterType="com.yjtse.entity.Socket">
+        UPDATE business_socket
+        SET
+        socket_name=#{socketName},
+--         owner_id=#{ownerId},
+        status=#{status}
+        WHERE
+        socket_id = #{socketId}
+    </update>
+
+    <delete id="deleteById" parameterType="String">
+        delete from
+        business_socket
+        where socket_id =#{socketId}
+    </delete>
+
+</mapper>
