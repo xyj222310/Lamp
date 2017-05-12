@@ -3,6 +3,7 @@ package com.yjtse.web;
 import com.yjtse.dto.Result;
 import com.yjtse.entity.Socket;
 import com.yjtse.service.SocketService;
+import com.yjtse.service.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class SocketController {
 
     @Autowired
     private SocketService socketService;
+    private TimerService timerService;
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {
             "application/json; charset=utf-8"})
@@ -65,10 +68,14 @@ public class SocketController {
      * @param date
      * @return
      */
-    @RequestMapping(name = "/timer", method = RequestMethod.GET)
+    @RequestMapping(name = "/timer", method = RequestMethod.POST)
     private Result timer(
-            @RequestParam(value = "date") Date date) {
-        return socketService.timer(date);
+            @RequestParam(value = "date") Date date,
+            @RequestParam(value = "socketId") String socketId,
+            @RequestParam(value = "socketName", required = false) String socketName,
+            @RequestParam(value = "ownerId") String ownerId,
+            @RequestParam(value = "status") String status) {
+        return timerService.setTimer(new Socket(socketId, socketName, ownerId, status), date);
     }
 
 
