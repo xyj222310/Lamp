@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * Created by yjtse on 2017/4/5.
  */
@@ -56,5 +58,18 @@ public class SocketController {
             @RequestParam(value = "socketId") String socketId) {
         return socketService.deleteById(socketId);
     }
+
+    /**
+     * 实现定时API
+     *
+     * @param date
+     * @return
+     */
+    @RequestMapping(name = "/timer", method = RequestMethod.GET)
+    private Result timer(
+            @RequestParam(value = "date") Date date) {
+        return socketService.timer(date);
+    }
+
 
 }

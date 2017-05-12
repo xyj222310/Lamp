@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Created by yjtse on 2017/4/5.
  */
@@ -64,5 +66,15 @@ public class SocketService {
         return (socketDao.deleteById(socketId) == 1) ?
                 new Result<>(true, "Deleted!") :
                 new Result(false, "Failed!");
+    }
+
+    /**
+     * 设置定时功能
+     *
+     * @param date
+     * @return
+     */
+    public Result timer(Date date) {
+        return new Result(false, "");
     }
 }
