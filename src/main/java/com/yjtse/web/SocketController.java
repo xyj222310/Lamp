@@ -36,15 +36,7 @@ public class SocketController {
     @RequestMapping(value = "/{socketId}", method = RequestMethod.GET)
     @ResponseBody
     private Result<Socket> getById(@PathVariable("socketId") String socketId, Model model) {
-
-        if (socketId != null) {
-            Socket socket = socketService.findById(socketId);
-            if (socket != null) {
-                return new Result<>(true, socket);
-            }
-            return new Result<>(false, "Socket Doesn't Exist!");
-        }
-        return new Result<>(false, "Error Input");
+        return socketService.findById(socketId);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {
@@ -56,21 +48,13 @@ public class SocketController {
             @RequestParam(value = "ownerId") String ownerId,
             @RequestParam(value = "status", required = false) String status) {
 
-        if (socketId != null && ownerId != null) {
-            if (socketService.updateSocket(new Socket(socketId, socketName, ownerId, status)) == 1) {
-                return new Result<>(true, "Update Success!");
-            }
-            return new Result<>(false, "Update Failed,Something Wrong!!!");
-        }
-        return new Result<>(false, "Error Input!");
+        return socketService.updateSocket(new Socket(socketId, socketName, ownerId, status));
     }
 
     @RequestMapping(name = "/delete", method = RequestMethod.DELETE)
     private Result deleteById(
             @RequestParam(value = "socketId") String socketId) {
-        return (socketService.deleteById(socketId) == 1) ?
-                new Result<>(true, "Deleted!") :
-                new Result(false, "Failed!");
+        return socketService.deleteById(socketId);
     }
 
 }

@@ -7,7 +7,7 @@ package com.yjtse.entity;
 
 public class Socket {
 
-    private int id;// 自增ID
+    private Integer id;// 自增ID
 
     private String socketId;// 插座id
 
@@ -17,7 +17,7 @@ public class Socket {
 
     private String status; //插座状态
 
-    public Socket(int id, String socketId, String socketNmame, String ownerId, String status) {
+    public Socket(Integer id, String socketId, String socketNmame, String ownerId, String status) {
         this.id = id;
         this.socketId = socketId;
         this.socketName = socketNmame;

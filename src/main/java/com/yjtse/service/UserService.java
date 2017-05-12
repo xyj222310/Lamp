@@ -1,6 +1,7 @@
 package com.yjtse.service;
 
 import com.yjtse.dao.UserDao;
+import com.yjtse.dto.Result;
 import com.yjtse.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +20,39 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public User getById(String userId) {
-        return userDao.findById(userId);
+    public Result getById(String userId) {
+
+        if (userId != null) {
+            User user = userDao.findById(userId);
+            if (user != null) {
+                return new Result<>(true, user);
+            }
+            return new Result<>(false, "User non exist");
+        }
+        return new Result<>(false, "wrong ID");
     }
 
-    public int addUser(User user) {
-        return userDao.addUser(user);
+    public Result addUser(User user) {
+
+        if (user.getUserId() != null && user.getUserPass() != null) {
+            if (userDao.addUser(user) == 1) {
+//                User user = userDao.findById(user.getUserId());
+                return new Result<>(true, "Registered!");
+            }
+            return new Result<>(false, "Register Failed,please check your Input");
+        }
+        return new Result<>(false, "Please Input Account & Password");
+
     }
 
-    public int updateUser(User user) {
-        return userDao.updateUser(user);
+    public Result updateUser(User user) {
+
+        if (user.getUserId() != null && user.getUserPass() != null) {
+            if (userDao.updateUser(user) == 1) {
+                return new Result<>(true, "Update Success!");
+            }
+            return new Result<>(false, "Update Failed!");
+        }
+        return new Result<>(false, "Error Input!");
     }
 }

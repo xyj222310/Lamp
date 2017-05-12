@@ -27,11 +27,11 @@
         values (#{socketId},#{socketName},#{ownerId},#{status})
     </insert>
 
-    <update id="updatesocket" parameterType="com.yjtse.entity.Socket">
+    <update id="updateSocket" parameterType="com.yjtse.entity.Socket">
         UPDATE business_socket
         SET
         socket_name=#{socketName},
---         owner_id=#{ownerId},
+        owner_id=#{ownerId},
         status=#{status}
         WHERE
         socket_id = #{socketId}

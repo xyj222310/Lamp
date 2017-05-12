@@ -30,14 +30,7 @@ public class UserController {
     @ResponseBody
     private Result<User> getById(@PathVariable("userId") String userId, Model model) {
 
-        if (userId != null) {
-            User user = userService.getById(userId);
-            if (user != null) {
-                return new Result<>(true, user);
-            }
-            return new Result<>(false, "User non exist");
-        }
-        return new Result<>(false, "wrong ID");
+        return userService.getById(userId);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {
@@ -53,14 +46,7 @@ public class UserController {
             @RequestParam(value = "icon", required = false) String icon,
             @RequestParam(value = "role", required = false) String role) {
 
-        if (userId != null && userPass != null) {
-            User user = new User(userId, mail, phone, userName, userPass, sex, icon, role);
-            if (userService.updateUser(user) == 1) {
-                return new Result<>(true, "Update Success!");
-            }
-            return new Result<>(false, "Update Failed!");
-        }
-        return new Result<>(false, "Error Input!");
+        return userService.updateUser(new User(userId, mail, phone, userName, userPass, sex, icon, role));
     }
 
     /**
@@ -89,14 +75,7 @@ public class UserController {
             @RequestParam(value = "icon", required = false) String icon,
             @RequestParam(value = "role", required = false) String role) {
 
-        if (userId != null && userPass != null) {
-            if (userService.addUser(new User(userId, mail, phone, userName, userPass, sex, icon, role)) == 1) {
-                User user = userService.getById(userId);
-                return new Result<>(true, "Registered!");
-            }
-            return new Result<>(false, "Register Failed,please check your Input");
-        }
-        return new Result<>(false, "Please Input Account & Password");
+        return userService.addUser(new User(userId, mail, phone, userName, userPass, sex, icon, role));
 
     }
 
