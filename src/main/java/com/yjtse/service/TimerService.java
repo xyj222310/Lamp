@@ -39,7 +39,6 @@ public class TimerService {
             prop.load(TimerService.class.getResourceAsStream("/set.properties"));
         } catch (IOException e) {
             return new Result(false, "读取配置文件失败：" + e);
-            e.printStackTrace();
         }
         String toAccountId = prop.getProperty("toAccountId", "fd60e46db0dc119cfea740c3375fd7c4");
         /*
@@ -66,7 +65,6 @@ public class TimerService {
             sched = new StdSchedulerFactory().getScheduler();
         } catch (SchedulerException e) {
             return new Result(false, "创建任务失败：" + e);
-            e.printStackTrace();
         }
 
         //配置计划任务的工作类名，这个类需要实现Job接口，在execute方法中实现所需要做的工作
