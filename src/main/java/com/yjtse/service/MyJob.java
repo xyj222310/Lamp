@@ -17,8 +17,8 @@ public class MyJob {
     @Autowired
     private SocketDao socketDao;
 
-    @Autowired
-    private QuartzManager quartzManager;
+//    @Autowired
+//    private QuartzManager quartzManager;
 
     public void doSomething(Socket socket) {
 
