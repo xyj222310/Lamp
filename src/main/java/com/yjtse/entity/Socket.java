@@ -17,26 +17,28 @@ public class Socket {
 
     private String status; //插座状态
 
-    public Socket(Integer id, String socketId, String socketNmame, String ownerId, String status) {
-        this.id = id;
+    private String cron; //插座定时参数
+
+    private String statusTobe; //定时设定的状态
+
+    public Socket(String socketId, String socketName, String ownerId, String status, String cron, String statusTobe) {
         this.socketId = socketId;
-        this.socketName = socketNmame;
+        this.socketName = socketName;
         this.ownerId = ownerId;
         this.status = status;
+        this.cron = cron;
+        this.statusTobe = statusTobe;
     }
 
-    public Socket(String socketId, String socketNmame, String ownerId, String status) {
-        this.socketId = socketId;
-        this.socketName = socketNmame;
-        this.ownerId = ownerId;
-        this.status = status;
+    public Socket() {
+
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,12 +50,12 @@ public class Socket {
         this.socketId = socketId;
     }
 
-    public String getSocketNmame() {
+    public String getSocketName() {
         return socketName;
     }
 
-    public void setSocketNmame(String socketNmame) {
-        this.socketName = socketNmame;
+    public void setSocketName(String socketName) {
+        this.socketName = socketName;
     }
 
     public String getOwnerId() {
@@ -71,4 +73,22 @@ public class Socket {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getCron() {
+        return cron;
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
+    }
+
+    public String getStatusTobe() {
+        return statusTobe;
+    }
+
+    public void setStatusTobe(String statusTobe) {
+        this.statusTobe = statusTobe;
+    }
+
+
 }

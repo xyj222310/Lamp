@@ -18,5 +18,10 @@ public interface SocketDao {
 
     int updateSocket(Socket socket);
 
+    /*
+    修改定时参数
+     */
+    int updateCron();
+
     int deleteById(String socketId);
 }

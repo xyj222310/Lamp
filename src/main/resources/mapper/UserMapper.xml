@@ -36,14 +36,31 @@
 
     <update id="updateUser" parameterType="com.yjtse.entity.User">
         UPDATE sys_user
-        SET
-        mail = #{mail},
-        phone = #{phone},
-        user_name = #{userName},
-        user_pass = #{userPass},
-        sex = #{sex},
-        icon = #{icon},
-        role = #{role}
+        <set>
+            <if test="mail!=null and mail!=''">
+                mail = #{mail},
+            </if>
+
+            <if test="phone!=null and phone!=''">
+                phone = #{phone},
+            </if>
+
+            <if test="userName!=null and userName!=''">
+                user_name = #{userName},
+            </if>
+            <if test="userPass!=null and userPass!=''">
+                user_pass = #{userPass},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex = #{sex},
+            </if>
+            <if test="icon!=null and icon!=''">
+                icon = #{icon},
+            </if>
+            <if test="role!=null and role!=''">
+                role = #{role},
+            </if>
+        </set>
         WHERE
         user_id = #{userId}
     </update>

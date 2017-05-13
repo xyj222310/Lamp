@@ -3,7 +3,6 @@ package com.yjtse.web;
 import com.yjtse.dto.Result;
 import com.yjtse.entity.Socket;
 import com.yjtse.service.SocketService;
-import com.yjtse.service.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by yjtse on 2017/4/5.
@@ -24,7 +23,9 @@ public class SocketController {
 
     @Autowired
     private SocketService socketService;
-    private TimerService timerService;
+
+//    @Autowired
+//    private TimerService timerService;
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {
@@ -33,9 +34,12 @@ public class SocketController {
     private Result<Socket> registerSocket(
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "socketName", required = false) String socketName,
-            @RequestParam(value = "ownerId", required = false) String ownerId,
-            @RequestParam(value = "status", required = false) String status) {
-        return socketService.addSocket(new Socket(socketId, socketName, ownerId, status));
+            @RequestParam(value = "ownerId", required = false) String ownerId) {
+        Socket socket = new Socket();
+        socket.setSocketId(socketId);
+        socket.setSocketName(socketName);
+        socket.setOwnerId(ownerId);
+        return socketService.addSocket(socket);
     }
 
     @RequestMapping(value = "/{socketId}", method = RequestMethod.GET)
@@ -51,9 +55,15 @@ public class SocketController {
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "socketName", required = false) String socketName,
             @RequestParam(value = "ownerId") String ownerId,
-            @RequestParam(value = "status", required = false) String status) {
-
-        return socketService.updateSocket(new Socket(socketId, socketName, ownerId, status));
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "cron", required = false) String cron) {
+        Socket socket = new Socket();
+        socket.setSocketId(socketId);
+        socket.setSocketName(socketName);
+        socket.setOwnerId(ownerId);
+        socket.setStatus(status);
+        socket.setCron(cron);
+        return socketService.updateSocket(socket);
     }
 
     @RequestMapping(name = "/delete", method = RequestMethod.DELETE)
@@ -63,19 +73,24 @@ public class SocketController {
     }
 
     /**
-     * 实现定时API
+     * 修改定时参数API
      *
-     * @param date
+     * @param localDateTime
      * @return
      */
-    @RequestMapping(name = "/timer", method = RequestMethod.POST)
-    private Result timer(
-            @RequestParam(value = "date") Date date,
+    @RequestMapping(value = "/updateCron", method = RequestMethod.POST, produces = {
+            "application/json; charset=utf-8"})
+    @ResponseBody
+    private Result<Socket> timer(
+            @RequestParam(value = "localDateTime", required = false) LocalDateTime localDateTime,
+            @RequestParam(value = "statusTobe") String statusTobe,
             @RequestParam(value = "socketId") String socketId,
-            @RequestParam(value = "socketName", required = false) String socketName,
-            @RequestParam(value = "ownerId") String ownerId,
-            @RequestParam(value = "status") String status) {
-        return timerService.setTimer(new Socket(socketId, socketName, ownerId, status), date);
+            @RequestParam(value = "ownerId") String ownerId) {
+        Socket socket = new Socket();
+        socket.setSocketId(socketId);
+        socket.setOwnerId(ownerId);
+        socket.setStatusTobe(statusTobe);
+        return socketService.updateTimerParams(socket, localDateTime);
     }
 
 

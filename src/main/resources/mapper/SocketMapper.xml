@@ -22,17 +22,29 @@
         insert into business_socket(
         socket_id,
         socket_name,
-        owner_id,
-        status)
-        values (#{socketId},#{socketName},#{ownerId},#{status})
+        owner_id)
+        values (#{socketId},#{socketName},#{ownerId})
     </insert>
 
     <update id="updateSocket" parameterType="com.yjtse.entity.Socket">
         UPDATE business_socket
-        SET
-        socket_name=#{socketName},
-        owner_id=#{ownerId},
-        status=#{status}
+        <set>
+            owner_id=#{ownerId},
+            <if test="socketName!=null and socketName!=''">
+                socket_name=#{socketName},
+            </if>
+
+            <if test="status!=null and status!=''">
+                status=#{status},
+            </if>
+
+            <if test="cron!=null and cron!=''">
+                cron=#{cron},
+            </if>
+            <if test="statusTobe!=null and statusTobe!=''">
+                status_tobe=#{statusTobe}
+            </if>
+        </set>
         WHERE
         socket_id = #{socketId}
     </update>
