@@ -1,13 +1,13 @@
 package com.yjtse.dto;//package com.yjtse.service;
 
+import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.time.LocalDateTime;
 
 //public class MyJob implements Job {
-public class Job1 extends QuartzJobBean {
+public class Job1 implements Job {
 
 //    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 //        System.out.println(LocalDateTime.now() + ": job 1 doing something...");
@@ -28,13 +28,12 @@ public class Job1 extends QuartzJobBean {
     }
 
 
-
     /**
      * 要调度的具体任务
      */
 
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 //        获取要修改的状态的插座的id
 //        String socketId = jobExecutionContext.getMergedJobDataMap().getString("socketId");
         System.out.println(LocalDateTime.now() + ": job 1 doing something...");

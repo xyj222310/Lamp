@@ -1,22 +1,25 @@
 package com.yjtse.dto;//package com.yjtse.service;
 
 import com.yjtse.dao.SocketDao;
-import com.yjtse.entity.Socket;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 //public class MyJob implements Job {
+@Service
 public class MyJob implements Job {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private SocketDao socketDao;
-
-//    @Autowired
-//    private QuartzManager quartzManager;
 
     private int timeout;
     private String socketId;
@@ -31,28 +34,28 @@ public class MyJob implements Job {
         this.socketId = socketId;
     }
 
-
-//    public void doSomething() {
-//
-////        socketDao.findById()
-////        socketDao.updateSocket(socket);
-//        System.out.println(LocalDateTime.now() + ": doSomething doing something...");
-//    }
-
     /**
      * 要调度的具体任务
      */
-
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         //获取要修改的状态的插座的id
-        String socketId = jobExecutionContext.getMergedJobDataMap().getString("socketId");
-
-        Socket socket = socketDao.findById(socketId);
-        socket.setStatus(socket.getStatusTobe());//按照定时要求的状态将插座设置为该状态
-        socketDao.updateSocket(socket);
+        jobExecutionContext.getJobDetail().getKey();
+//        String socketId = jobExecutionContext.getMergedJobDataMap().getString("socketId");
+//        if (socketId != null) {
+//            Socket socket = socketDao.findById(socketId);
+//            if (socket != null) {
+//                socket.setStatus(socket.getStatusTobe());//按照定时要求的状态将插座设置为该状态
+////                socketDao.updateSocket(socket);
+//            }
+        JobDataMap map = jobExecutionContext.getJobDetail().getJobDataMap();
+        if (map != null) {
+            map.getString("socketId");
+            map.getString("statusTobe");
+        }
         System.out.println(LocalDateTime.now() + ": job 1 doing something...");
-        System.out.println("\nexecuti...");
-    }
+        System.out.println("\n" + map.getString("socketId"));
+//        }
 
+    }
 }

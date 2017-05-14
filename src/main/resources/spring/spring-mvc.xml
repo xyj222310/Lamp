@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
     <!--不继承自jobbean基类的写法，配置为MyJob类-->
     <!--&lt;!&ndash;加入定时任务quartz配置&ndash;&gt;-->
-    <!--&lt;!&ndash; 这个类用来做需要完成的业务&ndash;&gt;-->
+    <!-- 这个类用来做需要完成的业务-->
     <!--<bean id="myJob" class="com.yjtse.dto.MyJob"></bean>-->
 
     <!--&lt;!&ndash; 定时任务 &ndash;&gt;-->
@@ -17,47 +17,51 @@
     <!--&lt;!&ndash; 是否并发  &ndash;&gt;-->
     <!--<property name="concurrent" value="false"/>-->
     <!--</bean>-->
-    <bean id="job1" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.yjtse.dto.MyJob"/>
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="timeout" value="0"/>
-                <entry key="socketId" value="11303010250"/>
-            </map>
-        </property>
-    </bean>
 
-    <!-- SimpleTriggerBean 触发器 -->
-    <!--<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">-->
-    <!--<property name="jobDetail" ref="job2"/>-->
-    <!--<property name="startDelay" value="0"/>&lt;!&ndash; 调度工厂实例化后，经过0秒开始执行调度 &ndash;&gt;-->
-    <!--<property name="repeatInterval" value="2000"/>&lt;!&ndash; 每2秒调度一次 &ndash;&gt;-->
+
+    <!--&lt;!&ndash; 定时任务 &ndash;&gt;-->
+    <!--&lt;!&ndash; 定义调用对象和调用对象的方法，这个配置和普通的一样的,id是JobDetail的名字  &ndash;&gt;-->
+    <!--<bean id="job1" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
+        <!--<property name="jobClass" value="com.yjtse.dto.MyJob"/>-->
+        <!--<property name="jobDataAsMap">-->
+            <!--<map>-->
+                <!--<entry key="timeout" value="0"/>-->
+                <!--<entry key="socketId" value="11303010250"/>-->
+            <!--</map>-->
+        <!--</property>-->
     <!--</bean>-->
 
-    <!--&lt;!&ndash; 定义触发时间 ，这边就不同了，这里必须将时间设置成无限长，因为我们要去读取数据库的时间来做为定时器的触发时间&ndash;&gt;-->
-    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
-        <property name="jobDetail" ref="job1"/>
-        <!-- cron表达式  先设置为1s执行一次看看效果-->
+    <!--&lt;!&ndash;SimpleTriggerBean 触发器 &ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="jobDetail" ref="job2"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="startDelay" value="0"/>&lt;!&ndash; 调度工厂实例化后，经过0秒开始执行调度 &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="repeatInterval" value="2000"/>&lt;!&ndash; 每2秒调度一次 &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash; 定义触发时间 ，这边就不同了，这里必须将时间设置成无限长，因为我们要去读取数据库的时间来做为定时器的触发时间&ndash;&gt;&ndash;&gt;-->
+    <!--<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">-->
+        <!--<property name="jobDetail" ref="job1"/>-->
+        <!--&lt;!&ndash; cron表达式  先设置为1s执行一次看看效果&ndash;&gt;-->
         <!--<property name="cronExpression" value="0 0 0 1 1 ? 2099"/>-->
-        <property name="cronExpression" value="0/3 * * * * ?"/>
-    </bean>
+        <!--&lt;!&ndash;<property name="cronExpression" value="0/5 * * * * ?"/>&ndash;&gt;-->
+    <!--</bean>-->
 
 
-    <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
-    <bean id="startQuertz" lazy-init="false" autowire="no"
-          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="triggers">
-            <list>
-                <ref bean="cronTrigger"/>
-                <!--<ref bean="simpleTrigger"/>-->
-            </list>
-        </property>
-    </bean>
+    <!--&lt;!&ndash; 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  &ndash;&gt;-->
+    <!--<bean id="startQuertz" lazy-init="false" autowire="no"-->
+          <!--class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--<ref bean="cronTrigger"/>-->
+                <!--&lt;!&ndash;<ref bean="simpleTrigger"/>&ndash;&gt;-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 
-    <!--这个类是用来设置触发时间的， startJobs方法启动调度容器，然后按照上面触发器每隔1s执行所配置的myJob2.doSomething()方法 -->
-    <bean id="quartzManager" class="com.yjtse.dto.QuartzManager" lazy-init="false" init-method="startJobs">
-        <!--这个对象一定要注入，这样类才能进行管理，还有在类型要用get set方法，不然会报错。-->
-        <property name="scheduler" ref="startQuertz"/>
-    </bean>
+    <!--&lt;!&ndash;这个类是用来设置触发时间的， startJobs方法启动调度容器，然后按照上面触发器每隔1s执行所配置的myJob2.doSomething()方法 &ndash;&gt;-->
+    <!--<bean id="quartzManager" class="com.yjtse.dto.QuartzManager" lazy-init="false" init-method="startJobs">-->
+        <!--&lt;!&ndash;这个对象一定要注入，这样类才能进行管理，还有在类型要用get set方法，不然会报错。&ndash;&gt;-->
+        <!--<property name="scheduler" ref="startQuertz"/>-->
+    <!--</bean>-->
 
 </beans>

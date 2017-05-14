@@ -83,7 +83,7 @@ public class SocketController {
     @ResponseBody
     private Result<Socket> timer(
             @RequestParam(value = "localDateTime", required = false) LocalDateTime localDateTime,
-            @RequestParam(value = "statusTobe") String statusTobe,
+            @RequestParam(value = "statusTobe", required = false) String statusTobe,
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "ownerId") String ownerId) {
         Socket socket = new Socket();
