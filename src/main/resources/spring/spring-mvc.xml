@@ -5,7 +5,7 @@
     <!--不继承自jobbean基类的写法，配置为MyJob类-->
     <!--&lt;!&ndash;加入定时任务quartz配置&ndash;&gt;-->
     <!-- 这个类用来做需要完成的业务-->
-    <!--<bean id="myJob" class="com.yjtse.dto.MyJob"></bean>-->
+    <!--<bean id="myJob" clacom.yjtse.service.MyJobyJob"></bean>-->
 
     <!--&lt;!&ndash; 定时任务 &ndash;&gt;-->
     <!--&lt;!&ndash; 定义调用对象和调用对象的方法，这个配置和普通的一样的,id是JobDetail的名字  &ndash;&gt;-->
@@ -22,7 +22,7 @@
     <!--&lt;!&ndash; 定时任务 &ndash;&gt;-->
     <!--&lt;!&ndash; 定义调用对象和调用对象的方法，这个配置和普通的一样的,id是JobDetail的名字  &ndash;&gt;-->
     <!--<bean id="job1" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
-        <!--<property name="jobClass" value="com.yjtse.dto.MyJob"/>-->
+        <!--<property name="jobClass" valcom.yjtse.service.MyJobyJob"/>-->
         <!--<property name="jobDataAsMap">-->
             <!--<map>-->
                 <!--<entry key="timeout" value="0"/>-->

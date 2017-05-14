@@ -1,11 +1,9 @@
 package com.yjtse.service;
 
 import com.yjtse.dao.SocketDao;
-import com.yjtse.dto.MyJob;
 import com.yjtse.dto.QuartzManager;
 import com.yjtse.dto.Result;
 import com.yjtse.entity.Socket;
-import org.quartz.JobDataMap;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -30,7 +28,7 @@ public class SocketService {
     @Autowired
     private SocketDao socketDao;
 
-    public Result findById(String socketId) {
+    public Result<Socket> findById(String socketId) {
 
         if (socketId != null) {
             Socket socket = socketDao.findById(socketId);
@@ -87,7 +85,7 @@ public class SocketService {
      */
     public Result updateTimerParams(Socket socket, LocalDateTime localDateTime) {
 
-        localDateTime = LocalDateTime.now().plusSeconds(30); //测试一下设置为30s之后
+        localDateTime = LocalDateTime.now().plusSeconds(3); //测试一下设置为30s之后
         System.out.println(LocalDateTime.now());
         /**
          * 把时间转为cron参数
@@ -119,14 +117,7 @@ public class SocketService {
             /**
              * 改之前先判断job是否存在
              */
-//            quartzManager.addJob(
-//                    socket.getSocketId() + JOB_NAME,
-//                    JOB_GROUP_NAME,
-//                    socket.getSocketId() + TRIGGER_NAME,
-//                    TRIGGER_GROUP_NAME,
-//                    MyJob.class,
-//                    //"0/1 * * * * ?");
-//                    "0 0 0 1 1 ? 2030");
+
             if (!scheduler.checkExists(JobKey.jobKey(socket.getSocketId() + JOB_NAME, JOB_GROUP_NAME))) {
                 quartzManager.addJob(
                         socket.getSocketId() + JOB_NAME,
@@ -134,23 +125,24 @@ public class SocketService {
                         socket.getSocketId() + TRIGGER_NAME,
                         TRIGGER_GROUP_NAME,
                         MyJob.class,
-                        //"0/1 * * * * ?");
-                        "0 0 0 1 1 ? 2030");
-
+                        //"0/15 * * * * ?");
+                        "0 0 0 1 1 ? 2030",
+                        socket,
+                        this);
             }
-            JobDataMap jobDataMap = scheduler.getJobDetail(JobKey.jobKey(socket.getSocketId() + JOB_NAME, JOB_GROUP_NAME)).getJobDataMap();
-            jobDataMap.put("socketId", socket.getSocketId());
-            jobDataMap.put("statusTobe", socket.getStatusTobe());
+
             /**
              * 修改定时的时间
              */
-            Thread.sleep(1000);
+            Thread.sleep(500);
             QuartzManager.modifyJobTime(
                     socket.getSocketId() + JOB_NAME,
                     JOB_GROUP_NAME,
                     socket.getSocketId() + TRIGGER_NAME,
                     TRIGGER_GROUP_NAME,
-                    valueBuilder.toString());
+                    valueBuilder.toString(),
+                    socket,
+                    this);
 //            QuartzManager.startJobs();
 
             return new Result(true, "创建成功");
