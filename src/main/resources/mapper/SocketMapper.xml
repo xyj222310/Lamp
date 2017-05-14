@@ -11,7 +11,9 @@
         socket_id,
         socket_name,
         owner_id,
-        status
+        status,
+        cron,
+        status_tobe
         FROM
         business_socket
         WHERE
