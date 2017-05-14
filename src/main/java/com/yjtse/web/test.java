@@ -1,6 +1,6 @@
 package com.yjtse.web;
 
-import com.yjtse.dto.QuartzManager;
+import com.yjtse.service.job.QuartzManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

@@ -1,5 +1,6 @@
-package com.yjtse.dto;
+package com.yjtse.service.job;
 
+import com.yjtse.dao.SocketDao;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -29,7 +30,7 @@ public class QuartzManager {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void addJob(String jobName, String jobGroupName,
-                              String triggerName, String triggerGroupName, Class jobClass, String cron, Object o, Object o2) {
+                              String triggerName, String triggerGroupName, Class jobClass, String cron, Object o, SocketDao socketDao) {
         try {
             Scheduler sched = schedulerFactory.getScheduler();
             // 任务名，任务组，任务执行类
@@ -45,7 +46,7 @@ public class QuartzManager {
             // 创建Trigger对象
             CronTrigger trigger = (CronTrigger) triggerBuilder.build();
             jobDetail.getJobDataMap().put("socket", o);
-            sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socketService", o2);
+//            sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socketService", socketDao.getClass());
             // 调度容器设置JobDetail和Trigger
             sched.scheduleJob(jobDetail, trigger);
 
@@ -67,7 +68,7 @@ public class QuartzManager {
      * @Description: 修改一个任务的触发时间
      */
     public static void modifyJobTime(String jobName,
-                                     String jobGroupName, String triggerName, String triggerGroupName, String cron, Object object, Object object2) {
+                                     String jobGroupName, String triggerName, String triggerGroupName, String cron, Object object) {
         try {
             Scheduler sched = schedulerFactory.getScheduler();
             TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroupName);
@@ -89,7 +90,7 @@ public class QuartzManager {
                 // 创建Trigger对象
                 trigger = (CronTrigger) triggerBuilder.build();
                 sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socket", object);
-                sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socketService", object2);
+//                sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socketService", socketService);
                 // 方式一 ：修改一个任务的触发时间
                 sched.rescheduleJob(triggerKey, trigger);
                 /** 方式一 ：调用 rescheduleJob 结束 */

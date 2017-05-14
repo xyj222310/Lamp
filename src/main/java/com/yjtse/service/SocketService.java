@@ -1,15 +1,17 @@
 package com.yjtse.service;
 
 import com.yjtse.dao.SocketDao;
-import com.yjtse.dto.QuartzManager;
+import com.yjtse.service.job.QuartzManager;
 import com.yjtse.dto.Result;
 import com.yjtse.entity.Socket;
+import com.yjtse.service.job.MyJob;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ public class SocketService {
 
     @Autowired
     private SocketDao socketDao;
+
+    private QuartzManager quartzManager = new QuartzManager();
 
     public Result<Socket> findById(String socketId) {
 
@@ -112,12 +116,11 @@ public class SocketService {
             /**
              * 给任务传参数
              */
-            QuartzManager quartzManager = new QuartzManager();
+
             Scheduler scheduler = quartzManager.getSchedulerFactory().getScheduler();
             /**
              * 改之前先判断job是否存在
              */
-
             if (!scheduler.checkExists(JobKey.jobKey(socket.getSocketId() + JOB_NAME, JOB_GROUP_NAME))) {
                 quartzManager.addJob(
                         socket.getSocketId() + JOB_NAME,
@@ -128,21 +131,20 @@ public class SocketService {
                         //"0/15 * * * * ?");
                         "0 0 0 1 1 ? 2030",
                         socket,
-                        this);
+                        socketDao);
             }
 
             /**
              * 修改定时的时间
              */
             Thread.sleep(500);
-            QuartzManager.modifyJobTime(
+            quartzManager.modifyJobTime(
                     socket.getSocketId() + JOB_NAME,
                     JOB_GROUP_NAME,
                     socket.getSocketId() + TRIGGER_NAME,
                     TRIGGER_GROUP_NAME,
                     valueBuilder.toString(),
-                    socket,
-                    this);
+                    socket);
 //            QuartzManager.startJobs();
 
             return new Result(true, "创建成功");
