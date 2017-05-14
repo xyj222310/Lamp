@@ -106,7 +106,7 @@ public class SocketService {
         /**
          * 修改定时任务
          */
-//        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-mvc.xml");
+//        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-quartz.xml");
 //        QuartzManager quartzManager = (QuartzManager) ctx.getBean("quartzManager");
         try {
 

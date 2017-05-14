@@ -18,7 +18,7 @@ public class test {
 
     public static void main(String[] args) throws BeansException {
 
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-mvc.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-quartz.xml");
         QuartzManager quartzManager = (QuartzManager) ctx.getBean("quartzManager");
 
 //        quartzManager.startJobs();
