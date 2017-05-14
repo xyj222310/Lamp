@@ -1,17 +1,16 @@
 package com.yjtse.service;
 
 import com.yjtse.dao.SocketDao;
-import com.yjtse.service.job.QuartzManager;
 import com.yjtse.dto.Result;
 import com.yjtse.entity.Socket;
 import com.yjtse.service.job.MyJob;
+import com.yjtse.service.job.QuartzManager;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -102,6 +101,11 @@ public class SocketService {
         valueBuilder.append("?"); //week
         valueBuilder.append(" " + localDateTime.getYear()); //year
         socket.setCron(valueBuilder.toString());
+
+        /**
+         * 更新一下数据库
+         */
+        socketDao.updateSocket(socket);
 
         /**
          * 修改定时任务
