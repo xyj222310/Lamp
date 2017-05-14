@@ -74,20 +74,8 @@ public class MyJob implements Job {
                     e.printStackTrace();
                 }
 
-//        jobService.doSomething(jobExecutionContext);
-//        if (map != null) {
-//            Socket socket = (Socket) map.get("socket");
-
-//            if (socket.getSocketId() != null) {
-//                Result<Socket> socketResult = socketDao.findById(socket.getSocketId());
-//                if (socketResult != null) {
-//                    Socket socket1 = socketResult.getData();
-//                    socket1.setStatus(socketResult.getData().getStatusTobe());//按照定时要求的状态将插座设置为该状态
-//                    socketService.updateSocket(socket1);
-//                }
-//            }
                 System.out.println(LocalDateTime.now() + ": job 1 doing something...");
-                System.out.println(map.getString("socketId"));
+                System.out.println(map.getString("socket"));
             }
 
         }
