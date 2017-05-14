@@ -28,11 +28,11 @@ CREATE TABLE `business_socket` (
   `socket_name` varchar(50) DEFAULT 'tse插座' COMMENT '插座代号',
   `owner_id` varchar(20) DEFAULT '-1' COMMENT '插座所属人id:；-1代表没绑定用户',
   `status` varchar(2) DEFAULT '-1' COMMENT '开关状态：0关/1开/-1表示未使用',
-  `cron` varchar(50) DEFAULT '0 0 0 1 1 ? 2099' COMMENT '定时参数默认设置为无限长时间，2099年',
   `status_tobe` varchar(2) DEFAULT '0' COMMENT '定时设置的 插座状态，默认为关1',
+  `cron` varchar(50) DEFAULT '0 0 0 1 1 ? 2040' COMMENT '定时参数默认设置为无限长时间，2040年  ''0 0 0 1 1 ? 2040‘\n暂时不用这个字段',
   PRIMARY KEY (`id`),
   UNIQUE KEY `socket_id` (`socket_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='业务：插座信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='业务：插座信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `business_socket` (
 
 LOCK TABLES `business_socket` WRITE;
 /*!40000 ALTER TABLE `business_socket` DISABLE KEYS */;
-INSERT INTO `business_socket` VALUES (1,'11303010250','tseSocket','1103010232','-1','0 0 0 1 1 ? 2099','0'),(2,'11303010260','tseSocket','1103010232','-1','0 0 0 1 1 ? 2099','0'),(3,'11303010270','tseSocket','1103010232','1','0 0 0 1 1 ? 2099','1');
+INSERT INTO `business_socket` VALUES (1,'11303010250','tseSocket','1103010232','-1','1','0 0 0 1 1 ? 2040'),(2,'11303010260','tseSocket','1103010232','0','0','7 58 23 14 MAY ? 2017');
 /*!40000 ALTER TABLE `business_socket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-14 14:32:20
+-- Dump completed on 2017-05-14 23:58:59
