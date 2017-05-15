@@ -16,10 +16,6 @@ public class DeviceSocketController {
     @Autowired
     private SocketService socketService;
 
-//    public DeviceSocketController(SocketService socketService) {
-//        this.socketService = socketService;
-//    }
-
     @PostConstruct
     public void listener() {
         SocketServerUtils socketServerUtils = SocketServerUtils.getInstance();

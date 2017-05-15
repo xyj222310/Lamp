@@ -24,10 +24,6 @@ public class SocketController {
     @Autowired
     private SocketService socketService;
 
-//    @Autowired
-//    private TimerService timerService;
-
-
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {
             "application/json; charset=utf-8"})
     @ResponseBody
