@@ -35,6 +35,7 @@ public class DeviceSocketController {
             public void OnReceiveSuccess(String message) {
                 // TODO Auto-generated method stub
                 System.out.println("端口：" + SocketServerUtils.port + "第" + (j++) + "次接收到信息:" + message);
+                System.out.println("开始查询插座状态并将数据返回给设备");
             }
 
             @Override
