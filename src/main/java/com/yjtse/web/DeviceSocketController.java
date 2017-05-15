@@ -1,32 +1,58 @@
 package com.yjtse.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yjtse.dto.SocketServerUtils;
+import com.yjtse.entity.Socket;
 import com.yjtse.service.SocketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 @Controller
 public class DeviceSocketController {
 
     @Autowired
-    private SocketService socketService;
+    private  SocketService socketService;
 
-    public static void main(String[] args) {
+//    public DeviceSocketController(SocketService socketService) {
+//        this.socketService = socketService;
+//    }
+
+    @PostConstruct
+    public void listener() {
         SocketServerUtils socketServerUtils = SocketServerUtils.getInstance();
-        socketServerUtils.init(9000);
+        socketServerUtils.init(SocketServerUtils.port);
+        System.out.println("listener on,listen to port " + SocketServerUtils.port + "---------------------------");
+        socketServerUtils.setConnectListener(new SocketServerUtils.ConnectListener() {
+
+            @Override
+            public void OnConnectSuccess() {
+                System.out.println("connection complete---------------------------");
+
+            }
+
+            @Override
+            public void OnConnectFail() {
+                System.out.println("connect failed---------------------------");
+            }
+        });
 
         socketServerUtils.setMessageListener(new SocketServerUtils.MessageListener() {
 
             @Override
-            public void OnSendSuccess() {
+            public void OnSendFail() {
                 // TODO Auto-generated method stub
-                System.out.println("发送完成");
+                System.out.println("send failed");
+//                socketServerUtils.Dissocket();
             }
 
             @Override
-            public void OnSendFail() {
+            public void OnSendSuccess() {
                 // TODO Auto-generated method stub
-                System.out.println("发送失败");
+                System.out.println("send Completed---------------------------");
             }
 
             int j = 0;
@@ -34,16 +60,94 @@ public class DeviceSocketController {
             @Override
             public void OnReceiveSuccess(String message) {
                 // TODO Auto-generated method stub
-                System.out.println("端口：" + SocketServerUtils.port + "第" + (j++) + "次接收到信息:" + message);
-                System.out.println("开始查询插座状态并将数据返回给设备");
+                System.out.println("port:" + SocketServerUtils.port + "\nThe" + (j++) + "time receiving info:" + message);
+                System.out.println("ready to query DB and return data to client---------------------------");
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    Socket socket = objectMapper.readValue(message, com.yjtse.entity.Socket.class);
+                    if (socket != null && socket.getSocketId() != null) {
+//                        socketService.findById(socket.getSocketId());
+                        socketServerUtils.SendDataToSensor(
+                                socketService.findById(socket.getSocketId()).getData().getStatus());
+                    }
+                } catch (IOException e) {
+                    socketServerUtils.SendDataToSensor("Data resolve Failed！");
+//                    socketServerUtils.Dissocket();
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void OnReceiveFail() {
                 // TODO Auto-generated method stub
-                System.out.println("接收信息失败");
+                System.out.println("receive failed---------------------------");
             }
         });
     }
 
 }
+
+//    public static void main(String[] args) {
+//        SocketServerUtils socketServerUtils = SocketServerUtils.getInstance();
+//        socketServerUtils.init(SocketServerUtils.port);
+//        System.out.println("listener on,listen to port " + SocketServerUtils.port + "---------------------------");
+//        socketServerUtils.setConnectListener(new SocketServerUtils.ConnectListener() {
+//
+//            @Override
+//            public void OnConnectSuccess() {
+//                System.out.println("connection complete---------------------------");
+//
+//            }
+//
+//            @Override
+//            public void OnConnectFail() {
+//                System.out.println("connect failed---------------------------");
+//            }
+//        });
+//
+//        socketServerUtils.setMessageListener(new SocketServerUtils.MessageListener() {
+//
+//            @Override
+//            public void OnSendFail() {
+//                // TODO Auto-generated method stub
+//                System.out.println("send failed");
+////                socketServerUtils.Dissocket();
+//            }
+//
+//            @Override
+//            public void OnSendSuccess() {
+//                // TODO Auto-generated method stub
+//                System.out.println("send Completed---------------------------");
+//            }
+//
+//            int j = 0;
+//
+//            @Override
+//            public void OnReceiveSuccess(String message) {
+//                // TODO Auto-generated method stub
+//                System.out.println("port:" + SocketServerUtils.port + "\nThe" + (j++) + "time receiving info:" + message);
+//                System.out.println("ready to query DB and return data to client---------------------------");
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                try {
+//                    Socket socket = objectMapper.readValue(message, com.yjtse.entity.Socket.class);
+//                    if (socket != null && socket.getSocketId() != null) {
+////                        socketService.findById(socket.getSocketId());
+//                        socketServerUtils.SendDataToSensor(
+//                                socketService.findById(socket.getSocketId()).getData().getStatus());
+//                    }
+//                } catch (IOException e) {
+//                    socketServerUtils.SendDataToSensor("Data resolve Failed！");
+////                    socketServerUtils.Dissocket();
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void OnReceiveFail() {
+//                // TODO Auto-generated method stub
+//                System.out.println("receive failed---------------------------");
+//            }
+//        });
+//    }
+
+

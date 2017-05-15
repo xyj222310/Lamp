@@ -16,25 +16,29 @@
 
     <mvc:default-servlet-handler/>
 
+
+    <!--<bean id="deviceSocketController" class="com.yjtse.web.DeviceSocketController" />-->
+    <!--init-method="listener"/>-->
+
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
     <context:component-scan base-package="com.yjtse.web"/>
     <!--<mvc:annotation-driven/>-->
 
     <!--&lt;!&ndash; 2.静态资源默认servlet配置-->
-        <!--(1)加入对静态资源的处理：js,gif,png-->
-        <!--(2)允许使用"/"做整体映射-->
-     <!--&ndash;&gt;-->
+    <!--(1)加入对静态资源的处理：js,gif,png-->
+    <!--(2)允许使用"/"做整体映射-->
+    <!--&ndash;&gt;-->
     <!--<mvc:default-servlet-handler/>-->
 
     <!--&lt;!&ndash; 3.配置jsp 显示ViewResolver &ndash;&gt;-->
     <!--<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">-->
-        <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
-        <!--<property name="prefix" value="/WEB-INF/jsp/"/>-->
-        <!--<property name="suffix" value=".jsp"/>-->
+    <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
+    <!--<property name="prefix" value="/WEB-INF/jsp/"/>-->
+    <!--<property name="suffix" value=".jsp"/>-->
     <!--</bean>-->
 
     <!--&lt;!&ndash; 4.扫描web相关的bean &ndash;&gt;-->

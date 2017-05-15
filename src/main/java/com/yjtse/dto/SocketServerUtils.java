@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class SocketServerUtils {
 
-    public static int port = 9000;
+    final public static int port = 9999;
     /**
      * 连接WIFI的输入流
      */
@@ -90,7 +90,7 @@ public class SocketServerUtils {
                     socket = new Socket();
 //                        SocketAddress socAddress = new InetSocketAddress( portInt);
 //                        socket.connect(socAddress, 5000);
-                    ServerSocket serverSocket = new ServerSocket(8989);
+                    ServerSocket serverSocket = new ServerSocket(portInt);
                     socket = serverSocket.accept();
                     if (connectListener != null) {
                         connectListener.OnConnectSuccess();
@@ -122,7 +122,7 @@ public class SocketServerUtils {
                 } catch (Exception e) {
                     e.printStackTrace();
                     connectListener.OnConnectFail();
-                    Dissocket();
+//                    Dissocket();
                 }
             }
         }).start();
@@ -145,7 +145,7 @@ public class SocketServerUtils {
                 if (messageListener != null) {
                     messageListener.OnReceiveFail();
                 }
-                Dissocket();
+//                Dissocket();
             }
         }
 
@@ -168,7 +168,7 @@ public class SocketServerUtils {
                 if (messageListener != null) {
                     messageListener.OnSendFail();
                 }
-                Dissocket();
+//                Dissocket();
             }
         }
     }
@@ -186,7 +186,7 @@ public class SocketServerUtils {
                 if (messageListener != null) {
                     messageListener.OnSendFail();
                 }
-                Dissocket();
+//                Dissocket();
             }
         }
     }
