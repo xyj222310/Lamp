@@ -1,10 +1,10 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="ssm:war exploded">
-    <output-path>$PROJECT_DIR$/target/ssm</output-path>
+  <artifact type="exploded-war" name="lamp:war exploded">
+    <output-path>$PROJECT_DIR$/target/lamp</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="ssm" />
+          <element id="module-output" name="lamp" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.1.1" />
@@ -49,9 +49,9 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/ssm/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/target/lamp/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="ssm/web/Web" />
+      <element id="javaee-facet-resources" facet="lamp/web/Web" />
     </root>
   </artifact>
 </component>
