@@ -82,7 +82,7 @@ public class SocketController {
             "application/json; charset=utf-8"})
     @ResponseBody
     private Result<Socket> timer(
-            @RequestParam(value = "localDateTime", required = false) LocalDateTime localDateTime,
+            @RequestParam(value = "localDateTime", required = true) String localDateTime,
             @RequestParam(value = "statusTobe", required = false) String statusTobe,
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "ownerId") String ownerId) {
@@ -90,7 +90,10 @@ public class SocketController {
         socket.setSocketId(socketId);
         socket.setOwnerId(ownerId);
         socket.setStatusTobe(statusTobe);
-        return socketService.updateTimerParams(socket, localDateTime);
+//        LocalDateTime.now();
+//        LocalDateTime.parse(localDateTime);
+        return socketService.updateTimerParams(socket,
+                LocalDateTime.parse(localDateTime));
     }
 
 

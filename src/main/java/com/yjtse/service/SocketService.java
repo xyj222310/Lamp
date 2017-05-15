@@ -88,8 +88,9 @@ public class SocketService {
      */
     public Result updateTimerParams(Socket socket, LocalDateTime localDateTime) {
 
-        localDateTime = LocalDateTime.now().plusSeconds(10); //测试一下设置为30s之后
-        System.out.println(LocalDateTime.now());
+//        localDateTime = LocalDateTime.now().plusSeconds(10); //测试一下设置为30s之后
+        localDateTime = localDateTime.minusSeconds(2);
+//        System.out.println(LocalDateTime.now());
         /**
          * 把时间转为cron参数
          */
