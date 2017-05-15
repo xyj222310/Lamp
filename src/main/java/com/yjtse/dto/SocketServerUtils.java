@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SocketServerUtils {
+
+    public static int port = 9000;
     /**
      * 连接WIFI的输入流
      */
@@ -113,13 +115,14 @@ public class SocketServerUtils {
                             if (messageListener != null) {
                                 messageListener.OnReceiveFail();
                             }
+
                             break;
                         }
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     connectListener.OnConnectFail();
+                    Dissocket();
                 }
             }
         }).start();
@@ -142,6 +145,7 @@ public class SocketServerUtils {
                 if (messageListener != null) {
                     messageListener.OnReceiveFail();
                 }
+                Dissocket();
             }
         }
 
@@ -164,6 +168,7 @@ public class SocketServerUtils {
                 if (messageListener != null) {
                     messageListener.OnSendFail();
                 }
+                Dissocket();
             }
         }
     }
@@ -181,6 +186,7 @@ public class SocketServerUtils {
                 if (messageListener != null) {
                     messageListener.OnSendFail();
                 }
+                Dissocket();
             }
         }
     }
@@ -198,7 +204,6 @@ public class SocketServerUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
