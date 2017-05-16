@@ -19,14 +19,18 @@ public class DeviceSocketController {
     @PostConstruct
     public void listener() {
         SocketServerUtils socketServerUtils = SocketServerUtils.getInstance();
-        socketServerUtils.init(SocketServerUtils.port);
+        try {
+            socketServerUtils.init(SocketServerUtils.port);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Connection init failed! " + SocketServerUtils.port + "---------------------------");
+        }
         System.out.println("listener on,listen to port " + SocketServerUtils.port + "---------------------------");
         socketServerUtils.setConnectListener(new SocketServerUtils.ConnectListener() {
 
             @Override
             public void OnConnectSuccess() {
                 System.out.println("connection complete---------------------------");
-
             }
 
             @Override
@@ -39,14 +43,11 @@ public class DeviceSocketController {
 
             @Override
             public void OnSendFail() {
-                // TODO Auto-generated method stub
                 System.out.println("send failed");
-//                socketServerUtils.Dissocket();
             }
 
             @Override
             public void OnSendSuccess() {
-                // TODO Auto-generated method stub
                 System.out.println("send Completed---------------------------");
             }
 
@@ -54,27 +55,23 @@ public class DeviceSocketController {
 
             @Override
             public void OnReceiveSuccess(String message) {
-                // TODO Auto-generated method stub
                 System.out.println("port:" + SocketServerUtils.port + "\nThe" + (j++) + "time receiving info:" + message);
                 System.out.println("ready to query DB and return data to client---------------------------");
                 ObjectMapper objectMapper = new ObjectMapper();
                 try {
                     Socket socket = objectMapper.readValue(message, com.yjtse.entity.Socket.class);
                     if (socket != null && socket.getSocketId() != null) {
-//                        socketService.findById(socket.getSocketId());
                         socketServerUtils.SendDataToSensor(
                                 socketService.findById(socket.getSocketId()).getData().getStatus());
                     }
                 } catch (IOException e) {
                     socketServerUtils.SendDataToSensor("Data resolve Failed！");
-//                    socketServerUtils.Dissocket();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void OnReceiveFail() {
-                // TODO Auto-generated method stub
                 System.out.println("receive failed---------------------------");
             }
         });

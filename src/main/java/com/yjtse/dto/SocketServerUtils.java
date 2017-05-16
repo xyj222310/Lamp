@@ -76,58 +76,66 @@ public class SocketServerUtils {
         return instance;
     }
 
-    public void init(final int portInt) {
+    public void init(final int portInt) throws IOException {
+
+        ServerSocket serverSocket = new ServerSocket(portInt);
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-            	/*
+                /*
                  * 连接次数计数器
             	 */
-                try {
-                    isConnected = false;
-//                        socket = new Socket(ipStr, portInt);//连接成功
-                    socket = new Socket();
-//                        SocketAddress socAddress = new InetSocketAddress( portInt);
-//                        socket.connect(socAddress, 5000);
-                    ServerSocket serverSocket = new ServerSocket(portInt);
-                    socket = serverSocket.accept();
-                    if (connectListener != null) {
-                        connectListener.OnConnectSuccess();
-                    }
-                    isConnected = true;
-                    socketInput = socket.getInputStream();
-                    socketOutput = socket.getOutputStream();
-
-                    while (true) {
-                        try {//连接成功便一直接收数据
-//                                DataInputStream dataInputStream = new DataInputStream(socketInput);
-//                                String result = dataInputStream.readUTF();
-                            while (socketInput.read(result) != -1) {
-                                String s = new String(result);
-                                if (messageListener != null) {
-                                    messageListener.OnReceiveSuccess(s);
-                                }
-                                s = "";
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            if (messageListener != null) {
-                                messageListener.OnReceiveFail();
-                            }
-
-                            break;
+                while (true) {
+                    try {
+                        socket = serverSocket.accept();
+                        if (connectListener != null) {
+                            connectListener.OnConnectSuccess();
                         }
+                        //开一个线程专门处理io
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Recvive(socket);
+                            }
+                        }).start();
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        connectListener.OnConnectFail();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    connectListener.OnConnectFail();
-//                    Dissocket();
                 }
             }
         }).start();
 
     }
+
+    private void Recvive(Socket socket) {
+        try {
+            socketInput = socket.getInputStream();
+            socketOutput = socket.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            try {//连接成功便一直接收数据
+                if (socketInput.read(result) != -1) {
+                    String s = new String(result);
+                    if (messageListener != null) {
+                        messageListener.OnReceiveSuccess(s);
+                    }
+                    s = "";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (messageListener != null) {
+                    messageListener.OnReceiveFail();
+                }
+
+            }
+        }
+    }
+
 
     /**
      * 从各传感器接受
@@ -207,6 +215,20 @@ public class SocketServerUtils {
         }
     }
 
+    /**
+     * 重启链接
+     *
+     * @return
+     */
+    public void restartConn() throws IOException {
+        Dissocket();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        init(SocketServerUtils.port);
+    }
 
     public ConnectListener getConnectListener() {
         return connectListener;
