@@ -117,22 +117,30 @@ public class SocketServerUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        while (true) {
-            try {//连接成功便一直接收数据
-                if (socketInput.read(result) != -1) {
-                    String s = new String(result);
-                    if (messageListener != null) {
-                        messageListener.OnReceiveSuccess(s);
-                    }
-                    s = "";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (messageListener != null) {
-                    messageListener.OnReceiveFail();
-                }
 
-            }
+        try {
+            while (socketInput.read(result) != -1) {
+//                try {//连接成功便一直接收数据
+//                    if (socketInput.read(result) != -1) {
+                        String s = new String(result);
+                        if (messageListener != null) {
+                            messageListener.OnReceiveSuccess(s);
+                        }
+                        s = "";
+                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    if (messageListener != null) {
+//                        messageListener.OnReceiveFail();
+//                    }
+//
+//                }
+//            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        if (messageListener != null) {
+        messageListener.OnReceiveFail();
+        }
         }
     }
 
