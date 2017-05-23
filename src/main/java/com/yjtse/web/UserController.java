@@ -21,7 +21,6 @@ public class UserController {
 
     /**
      * 通过账号查询用户信息
-     * ajax json
      */
     @Autowired
     private UserService userService;
@@ -31,6 +30,15 @@ public class UserController {
     private Result<User> getById(@PathVariable("userId") String userId, Model model) {
 
         return userService.getById(userId);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {
+            "application/json; charset=utf-8"})
+    @ResponseBody
+    private Result<User> login(@RequestParam(value = "userId") String userId,
+                               @RequestParam(value = "userPass") String userPass) {
+        return userService.login(userId, userPass);
+
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {

@@ -32,6 +32,18 @@ public class UserService {
         return new Result<>(false, "wrong ID");
     }
 
+    public Result login(String userId,String userPass) {
+
+        if (userId != null) {
+            User user = userDao.findById(userId);
+            if (userPass != null && userPass.equals(user.getUserPass())) {
+                return new Result<>(true, user);
+            }
+            return new Result<>(false, "wrong password");
+        }
+        return new Result<>(false, "wrong ID");
+    }
+
     public Result addUser(User user) {
 
         if (user.getUserId() != null && user.getUserPass() != null) {
