@@ -32,7 +32,7 @@ public class UserService {
         return new Result<>(false, "wrong ID");
     }
 
-    public Result login(String userId,String userPass) {
+    public Result login(String userId, String userPass) {
 
         if (userId != null) {
             User user = userDao.findById(userId);
@@ -60,6 +60,19 @@ public class UserService {
     public Result updateUser(User user) {
 
         if (user.getUserId() != null && user.getUserPass() != null) {
+            if (userDao.updateUser(user) == 1) {
+                return new Result<>(true, "Update Success!");
+            }
+            return new Result<>(false, "Update Failed!");
+        }
+        return new Result<>(false, "Error Input!");
+    }
+
+    public Result<User> updateUserPass(String userId, String userPass) {
+        if (userId != null && userPass != null) {
+            User user = new User();
+            user.setUserId(userId);
+            user.setUserPass(userPass);
             if (userDao.updateUser(user) == 1) {
                 return new Result<>(true, "Update Success!");
             }

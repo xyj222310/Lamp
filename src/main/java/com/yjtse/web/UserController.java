@@ -57,6 +57,17 @@ public class UserController {
         return userService.updateUser(new User(userId, mail, phone, userName, userPass, sex, icon, role));
     }
 
+    @RequestMapping(value = "/updatePass", method = RequestMethod.POST, produces = {
+            "application/json; charset=utf-8"})
+    @ResponseBody
+    private Result<User> updatePassById(
+            @RequestParam(value = "userId") String userId,
+            @RequestParam(value = "userPass") String userPass
+    ) {
+
+        return userService.updateUserPass(userId, userPass);
+    }
+
     /**
      * 注册用户
      *
