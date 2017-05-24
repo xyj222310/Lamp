@@ -13,6 +13,7 @@
         owner_id,
         status,
         cron,
+        available,
         status_tobe
         FROM
         business_socket
@@ -45,6 +46,9 @@
 
             <if test="cron!=null and cron!=''">
                 cron=#{cron},
+            </if>
+            <if test="available!=null and available!=''">
+                available=#{available},
             </if>
             <if test="statusTobe!=null and statusTobe!=''">
                 status_tobe=#{statusTobe}

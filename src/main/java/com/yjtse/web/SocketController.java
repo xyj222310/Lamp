@@ -57,6 +57,7 @@ public class SocketController {
             @RequestParam(value = "socketName", required = false) String socketName,
             @RequestParam(value = "ownerId") String ownerId,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "available", required = false) String available,
             @RequestParam(value = "cron", required = false) String cron) {
         Socket socket = new Socket();
         socket.setSocketId(socketId);
@@ -64,6 +65,7 @@ public class SocketController {
         socket.setOwnerId(ownerId);
         socket.setStatus(status);
         socket.setCron(cron);
+        socket.setAvailable(available);
         return socketService.updateSocket(socket);
     }
 

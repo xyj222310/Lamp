@@ -88,6 +88,11 @@ public class SocketServerUtils {
                 while (true) {
                     try {
                         socket = serverSocket.accept();
+
+                        /**
+                         * 设置超时时间
+                         */
+                        socket.setSoTimeout(10000);
                         if (connectListener != null) {
                             connectListener.OnConnectSuccess();
                         }
@@ -120,27 +125,22 @@ public class SocketServerUtils {
 
         try {
             while (socketInput.read(result) != -1) {
+//                if (socket.isClosed()) {
+//                    connectListener.OnConnectFail();
+//                }
 //                try {//连接成功便一直接收数据
 //                    if (socketInput.read(result) != -1) {
-                        String s = new String(result);
-                        if (messageListener != null) {
-                            messageListener.OnReceiveSuccess(s);
-                        }
-                        s = "";
-                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    if (messageListener != null) {
-//                        messageListener.OnReceiveFail();
-//                    }
-//
-//                }
-//            }
+                String s = new String(result);
+                if (messageListener != null) {
+                    messageListener.OnReceiveSuccess(s);
+                }
+                s = "";
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        if (messageListener != null) {
-        messageListener.OnReceiveFail();
-        }
+            if (messageListener != null) {
+                messageListener.OnReceiveFail();
+            }
         }
     }
 

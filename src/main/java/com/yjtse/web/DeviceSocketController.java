@@ -16,6 +16,9 @@ public class DeviceSocketController {
     @Autowired
     private SocketService socketService;
 
+
+    public Socket socket = null;
+
     @PostConstruct
     public void listener() {
         SocketServerUtils socketServerUtils = SocketServerUtils.getInstance();
@@ -59,13 +62,17 @@ public class DeviceSocketController {
                 System.out.println("ready to query DB and return data to client---------------------------");
                 ObjectMapper objectMapper = new ObjectMapper();
                 try {
-                    Socket socket = objectMapper.readValue(message, com.yjtse.entity.Socket.class);
+                    socket = objectMapper.readValue(message, com.yjtse.entity.Socket.class);
                     if (socket != null && socket.getSocketId() != null) {
+                        Socket result = socketService.findById(socket.getSocketId()).getData();
                         socketServerUtils.SendDataToSensor(
-                                socketService.findById(socket.getSocketId()).getData().getStatus());
+                                result.getStatus());
+                        result.setAvailable("1");
+                        socketService.updateSocket(result);
                     }
                 } catch (IOException e) {
                     socketServerUtils.SendDataToSensor("Data resolve Failed！");
+                    SocketServerUtils.getInstance().getMessageListener().OnSendFail();
                     e.printStackTrace();
                 }
             }
@@ -73,6 +80,11 @@ public class DeviceSocketController {
             @Override
             public void OnReceiveFail() {
                 System.out.println("receive failed---------------------------");
+                if (socket != null && socket.getSocketId() != null) {
+                    Socket result = socketService.findById(socket.getSocketId()).getData();
+                    result.setAvailable("-1");
+                    socketService.updateSocket(result);
+                }
             }
         });
     }
