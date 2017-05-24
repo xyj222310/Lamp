@@ -38,9 +38,9 @@ public class SocketController {
         return socketService.addSocket(socket);
     }
 
-    @RequestMapping(value = "/{socketId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
-    private Result<Socket> getById(@PathVariable("socketId") String socketId, Model model) {
+    private Result<Socket> getById(@RequestParam("socketId") String socketId, Model model) {
         return socketService.findById(socketId);
     }
 

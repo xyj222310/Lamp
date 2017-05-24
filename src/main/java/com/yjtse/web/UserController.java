@@ -25,9 +25,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
-    private Result<User> getById(@PathVariable("userId") String userId, Model model) {
+    private Result<User> getById(@RequestParam("userId") String userId, Model model) {
 
         return userService.getById(userId);
     }
