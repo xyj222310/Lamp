@@ -50,9 +50,9 @@ public class SocketService {
 //                socketService.findById(socketId);
                 return new Result<>(true, "Socket Registered!");
             }
-//            return new Result<>(false, "Socket Register Failed,please check your Input");
+            return new Result<>(false, "Socket already exist");
         }
-        return new Result<>(false, "Please Input Account & Password");
+        return new Result<>(false, "input error ");
 
     }
 
@@ -60,9 +60,9 @@ public class SocketService {
 
         if (socket.getSocketId() != null && socket.getOwnerId() != null) {
 
+            //判断用户操作插座权限
             if (socketDao.findById(socket.getSocketId()).getOwnerId()
                     .equals(socket.getOwnerId())) {
-                //判断用户操作插座权限
                 if (socketDao.updateSocket(socket) == 1) {
                     return new Result<>(true, "Update Success!");
                 }
@@ -106,60 +106,66 @@ public class SocketService {
         /**
          * 更新一下数据库
          */
-        socketDao.updateSocket(socket);
-
-        /**
-         * 修改定时任务
-         */
+        //判断用户操作插座权限
+        if (socketDao.findById(socket.getSocketId()).getOwnerId()
+                .equals(socket.getOwnerId())) {
+            socketDao.updateSocket(socket);
+            /**
+             * 修改定时任务
+             */
 //        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-quartz.xml");
 //        QuartzManager quartzManager = (QuartzManager) ctx.getBean("quartzManager");
-        try {
+            try {
 
-            Thread.sleep(500);
-            System.out.println("【modify job 】");
+                Thread.sleep(500);
+                System.out.println("【modify job 】");
 
-            /**
-             * 给任务传参数
-             */
+                /**
+                 * 给任务传参数
+                 */
 
-            Scheduler scheduler = quartzManager.getSchedulerFactory().getScheduler();
-            /**
-             * 改之前先判断job是否存在
-             */
-            if (!scheduler.checkExists(JobKey.jobKey(socket.getSocketId() + JOB_NAME, JOB_GROUP_NAME))) {
-                quartzManager.addJob(
+                Scheduler scheduler = quartzManager.getSchedulerFactory().getScheduler();
+                /**
+                 * 改之前先判断job是否存在
+                 */
+                if (!scheduler.checkExists(JobKey.jobKey(socket.getSocketId() + JOB_NAME, JOB_GROUP_NAME))) {
+                    quartzManager.addJob(
+                            socket.getSocketId() + JOB_NAME,
+                            JOB_GROUP_NAME,
+                            socket.getSocketId() + TRIGGER_NAME,
+                            TRIGGER_GROUP_NAME,
+                            MyJob.class,
+                            //"0/15 * * * * ?");
+                            "0 0 0 1 1 ? 2030",
+                            socket,
+                            socketDao);
+                }
+
+                /**
+                 * 修改定时的时间
+                 */
+                Thread.sleep(500);
+                quartzManager.modifyJobTime(
                         socket.getSocketId() + JOB_NAME,
                         JOB_GROUP_NAME,
                         socket.getSocketId() + TRIGGER_NAME,
                         TRIGGER_GROUP_NAME,
-                        MyJob.class,
-                        //"0/15 * * * * ?");
-                        "0 0 0 1 1 ? 2030",
-                        socket,
-                        socketDao);
-            }
-
-            /**
-             * 修改定时的时间
-             */
-            Thread.sleep(500);
-            quartzManager.modifyJobTime(
-                    socket.getSocketId() + JOB_NAME,
-                    JOB_GROUP_NAME,
-                    socket.getSocketId() + TRIGGER_NAME,
-                    TRIGGER_GROUP_NAME,
-                    valueBuilder.toString(),
-                    socket);
+                        valueBuilder.toString(),
+                        socket);
 //            QuartzManager.startJobs();
 
-            return new Result(true, "创建成功");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return new Result(false, "修改定时失败");
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-            return new Result(false, "获取任务池失败");
-        }
+                return new Result(true, "success");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return new Result(false, "failed");
+            } catch (SchedulerException e) {
+                e.printStackTrace();
+                return new Result(false, "error to get JOB pool");
+            }
+
+        } else return new Result(false, "check your permission!");
     }
+
+
 }
 

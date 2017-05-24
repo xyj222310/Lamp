@@ -8,7 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 
@@ -30,11 +33,13 @@ public class SocketController {
     private Result<Socket> registerSocket(
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "socketName", required = false) String socketName,
-            @RequestParam(value = "ownerId", required = false) String ownerId) {
+            @RequestParam(value = "ownerId") String ownerId,
+            @RequestParam(value = "status", required = false) String status) {
         Socket socket = new Socket();
         socket.setSocketId(socketId);
         socket.setSocketName(socketName);
         socket.setOwnerId(ownerId);
+        socket.setStatus(status);
         return socketService.addSocket(socket);
     }
 
@@ -78,8 +83,8 @@ public class SocketController {
             "application/json; charset=utf-8"})
     @ResponseBody
     private Result<Socket> timer(
-            @RequestParam(value = "localDateTime", required = true) String localDateTime,
-            @RequestParam(value = "statusTobe", required = false) String statusTobe,
+            @RequestParam(value = "localDateTime") String localDateTime,
+            @RequestParam(value = "statusTobe") String statusTobe,
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "ownerId") String ownerId) {
         Socket socket = new Socket();

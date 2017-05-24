@@ -24,14 +24,17 @@
         insert into business_socket(
         socket_id,
         socket_name,
-        owner_id)
-        values (#{socketId},#{socketName},#{ownerId})
+        owner_id,
+        status)
+        values (#{socketId},#{socketName},#{ownerId},#{status})
     </insert>
 
     <update id="updateSocket" parameterType="com.yjtse.entity.Socket">
         UPDATE business_socket
-        <set>
-            owner_id=#{ownerId},
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ownerId!=null and ownerId!=''">
+                owner_id=#{ownerId},
+            </if>
             <if test="socketName!=null and socketName!=''">
                 socket_name=#{socketName},
             </if>
@@ -46,7 +49,7 @@
             <if test="statusTobe!=null and statusTobe!=''">
                 status_tobe=#{statusTobe}
             </if>
-        </set>
+        </trim>
         WHERE
         socket_id = #{socketId}
     </update>
