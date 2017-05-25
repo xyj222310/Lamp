@@ -21,6 +21,22 @@
         socket_id = #{socketId}
     </select>
 
+    <select id="findAllByUserId" parameterType="String" resultType="com.yjtse.entity.Socket">
+        SELECT
+        id,
+        socket_id,
+        socket_name,
+        owner_id,
+        status,
+        cron,
+        available,
+        status_tobe
+        FROM
+        business_socket
+        WHERE
+          owner_id = #{userId}
+    </select>
+
     <insert id="addSocket" parameterType="com.yjtse.entity.Socket">
         insert into business_socket(
         socket_id,

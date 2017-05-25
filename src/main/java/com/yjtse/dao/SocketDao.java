@@ -2,6 +2,8 @@ package com.yjtse.dao;
 
 import com.yjtse.entity.Socket;
 
+import java.util.List;
+
 /**
  * Created by yjtse on 2017/4/5.
  */
@@ -13,6 +15,8 @@ public interface SocketDao {
      * @return
      */
     Socket findById(String socketId);
+
+    List<Socket> findAllByUserId(String userId);
 
     int addSocket(Socket socket);
 

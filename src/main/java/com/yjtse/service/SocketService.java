@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by yjtse on 2017/4/5.
@@ -41,6 +42,10 @@ public class SocketService {
             return new Result<>(false, "Socket Doesn't Exist!");
         }
         return new Result<>(false, "Error Input");
+    }
+
+    public List<Socket> findAllByUserId(String userId) {
+        return socketDao.findAllByUserId(userId);
     }
 
     public Result addSocket(Socket socket) {

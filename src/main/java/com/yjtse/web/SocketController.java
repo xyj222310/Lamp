@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by yjtse on 2017/4/5.
@@ -47,6 +48,12 @@ public class SocketController {
     @ResponseBody
     private Result<Socket> getById(@RequestParam("socketId") String socketId, Model model) {
         return socketService.findById(socketId);
+    }
+
+    @RequestMapping(value = "/queryAll", method = RequestMethod.GET)
+    @ResponseBody
+    private List<Socket> getAllByUserId(@RequestParam("ownerId") String ownerId, Model model) {
+        return socketService.findAllByUserId(ownerId);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {
