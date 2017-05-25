@@ -62,13 +62,18 @@ public class DeviceSocketController {
                 System.out.println("ready to query DB and return data to client---------------------------");
                 ObjectMapper objectMapper = new ObjectMapper();
                 try {
+
                     socket = objectMapper.readValue(message, com.yjtse.entity.Socket.class);
                     if (socket != null && socket.getSocketId() != null) {
                         Socket result = socketService.findById(socket.getSocketId()).getData();
-                        socketServerUtils.SendDataToSensor(
-                                result.getStatus());
+                        /**
+                         * 设为可用
+                         */
                         result.setAvailable("1");
                         socketService.updateSocket(result);
+                        socketServerUtils.SendDataToSensor(
+                                result.getStatus());
+
                     }
                 } catch (IOException e) {
                     socketServerUtils.SendDataToSensor("Data resolve Failed！");

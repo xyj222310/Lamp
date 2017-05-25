@@ -10,6 +10,8 @@ import java.net.Socket;
 public class SocketServerUtils {
 
     final public static int port = 9999;
+
+    final public static int timeOut = 15000;
     /**
      * 连接WIFI的输入流
      */
@@ -92,7 +94,7 @@ public class SocketServerUtils {
                         /**
                          * 设置超时时间
                          */
-                        socket.setSoTimeout(10000);
+                        socket.setSoTimeout(timeOut);
                         if (connectListener != null) {
                             connectListener.OnConnectSuccess();
                         }
