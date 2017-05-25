@@ -69,7 +69,9 @@ public class SocketController {
         return socketService.updateSocket(socket);
     }
 
-    @RequestMapping(name = "/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = {
+            "application/json; charset=utf-8"})
+    @ResponseBody
     private Result deleteById(
             @RequestParam(value = "socketId") String socketId) {
         return socketService.deleteById(socketId);
