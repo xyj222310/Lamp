@@ -48,12 +48,10 @@ public class SocketService {
         return socketDao.findAllByUserId(userId);
     }
 
-    public Result addSocket(Socket socket) {
+    public Result<Socket> addSocket(Socket socket) {
         if (socket.getSocketId() != null) {
             if (socketDao.addSocket(socket) == 1) {
-
-//                socketService.findById(socketId);
-                return new Result<>(true, "Socket Registered!");
+                return new Result<>(true, socketDao.findById(socket.getSocketId()));
             }
             return new Result<>(false, "Socket already exist");
         }
@@ -78,10 +76,13 @@ public class SocketService {
         return new Result<>(false, "Error Input!");
     }
 
-    public Result deleteById(String socketId) {
-        return (socketDao.deleteById(socketId) == 1) ?
-                new Result<>(true, "Deleted!") :
-                new Result(false, "Failed!");
+    public Result deleteById(String socketId, String ownerId) {
+        if (socketDao.findById(socketId).getOwnerId().equals(ownerId)) {
+            return (socketDao.deleteById(socketId) == 1) ?
+                    new Result<>(true, "Deleted!") :
+                    new Result(false, "Failed!");
+        }
+        return (new Result<>(true, "not permmited to this"));
     }
 
     /**

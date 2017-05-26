@@ -80,8 +80,9 @@ public class SocketController {
             "application/json; charset=utf-8"})
     @ResponseBody
     private Result deleteById(
-            @RequestParam(value = "socketId") String socketId) {
-        return socketService.deleteById(socketId);
+            @RequestParam(value = "socketId") String socketId,
+            @RequestParam(value = "ownerId") String ownerId) {
+        return socketService.deleteById(socketId,ownerId);
     }
 
     /**
