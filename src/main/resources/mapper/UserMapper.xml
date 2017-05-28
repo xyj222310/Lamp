@@ -17,8 +17,17 @@
         role
         FROM
         sys_user
-        WHERE
-        user_id = #{userId}
+        <where>
+            <if test="userId!=null and userId!=''">
+                user_id = #{userId}
+            </if>
+            <if test="mail!=null and mail!=''">
+                AND mail = #{mail}
+            </if>
+            <if test="phone!=null and phone!=''">
+                AND phone = #{phone}
+            </if>
+        </where>
     </select>
 
     <insert id="addUser" parameterType="com.yjtse.entity.User">

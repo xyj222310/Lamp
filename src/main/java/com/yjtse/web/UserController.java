@@ -30,9 +30,12 @@ public class UserController {
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
-    private Result<User> getById(@RequestParam("userId") String userId, Model model) {
-
-        return userService.getById(userId);
+    private Result<User> getById(
+            @RequestParam(value = "userId", required = false) String userId,
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "mail", required = false) String mail,
+            Model model) {
+        return userService.getById(userId,phone,mail);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {

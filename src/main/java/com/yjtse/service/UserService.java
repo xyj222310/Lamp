@@ -20,22 +20,22 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public Result getById(String userId) {
+    public Result getById(String userId, String phone, String mail) {
 
-        if (userId != null) {
-            User user = userDao.findById(userId);
+        if (userId != null || phone != null || mail != null) {
+            User user = userDao.findById(userId, phone, mail);
             if (user != null) {
                 return new Result<>(true, user);
             }
             return new Result<>(false, "User non exist");
         }
-        return new Result<>(false, "wrong ID");
+        return new Result<>(false, "you have to input sth");
     }
 
     public Result login(String userId, String userPass) {
 
         if (userId != null) {
-            User user = userDao.findById(userId);
+            User user = userDao.findById(userId, null, null);
             if (userPass != null && userPass.equals(user.getUserPass())) {
                 return new Result<>(true, user);
             }
