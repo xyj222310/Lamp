@@ -45,13 +45,14 @@ public class UserService {
     }
 
     public Result addUser(User user) {
-
         if (user.getUserId() != null && user.getUserPass() != null) {
-            if (userDao.addUser(user) == 1) {
+            if (userDao.findById(user.getUserId(), user.getPhone(), user.getMail()) == null) {
+                if (userDao.addUser(user) == 1) {
 //                User user = userDao.findById(user.getUserId());
-                return new Result<>(true, "Registered!");
+                    return new Result<>(true, "Registered!");
+                }
             }
-            return new Result<>(false, "Register Failed,please check your Input");
+            return new Result<>(false, "user already exist");
         }
         return new Result<>(false, "Please Input Account & Password");
 
