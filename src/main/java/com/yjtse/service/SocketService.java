@@ -95,7 +95,7 @@ public class SocketService {
     public Result updateTimerParams(Socket socket, LocalDateTime localDateTime) {
 
 //        localDateTime = LocalDateTime.now().plusSeconds(10); //测试一下设置为30s之后
-        localDateTime = localDateTime.minusSeconds(2);
+//        localDateTime = localDateTime.minusSeconds(1);
 //        System.out.println(LocalDateTime.now());
         /**
          * 把时间转为cron参数
@@ -104,7 +104,7 @@ public class SocketService {
         valueBuilder.append(localDateTime.getMinute() + " ");
         valueBuilder.append(localDateTime.getHour() + " ");
         valueBuilder.append(localDateTime.getDayOfMonth() + " ");
-        valueBuilder.append(localDateTime.getMonth() + " "); //month
+        valueBuilder.append(localDateTime.getMonthValue() + " "); //month
         valueBuilder.append("?"); //week
         valueBuilder.append(" " + localDateTime.getYear()); //year
         socket.setCron(valueBuilder.toString());
@@ -122,7 +122,6 @@ public class SocketService {
 //        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-quartz.xml");
 //        QuartzManager quartzManager = (QuartzManager) ctx.getBean("quartzManager");
             try {
-
                 Thread.sleep(500);
                 System.out.println("【modify job 】");
 

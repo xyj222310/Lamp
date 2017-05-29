@@ -36,7 +36,6 @@ public class MyJob implements Job {
         JobDataMap map = jobExecutionContext.getJobDetail().getJobDataMap();
         if (map != null) {
             Socket socket = (Socket) map.get("socket");
-//
             if (socket.getSocketId() != null) {
                 /**
                  * 想不出更好的办法了，直接jdbc，用古老的办法执行update吧
@@ -75,7 +74,7 @@ public class MyJob implements Job {
                 }
 
                 System.out.println(LocalDateTime.now() + ": job 1 doing something...");
-                System.out.println(map.getString("socket"));
+//                System.out.println(map.getString("socket"));
             }
 
         }

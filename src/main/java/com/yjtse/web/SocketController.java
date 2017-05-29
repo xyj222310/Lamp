@@ -82,7 +82,7 @@ public class SocketController {
     private Result deleteById(
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "ownerId") String ownerId) {
-        return socketService.deleteById(socketId,ownerId);
+        return socketService.deleteById(socketId, ownerId);
     }
 
     /**
@@ -105,9 +105,11 @@ public class SocketController {
         socket.setStatusTobe(statusTobe);
 //        LocalDateTime.now();
 //        LocalDateTime.parse(localDateTime);
-        return socketService.updateTimerParams(socket,
-                LocalDateTime.parse(localDateTime));
+        try {
+            return socketService.updateTimerParams(socket,
+                    LocalDateTime.parse(localDateTime));
+        } catch (Exception e) {
+            return new Result<Socket>(false, "data format error");
+        }
     }
-
-
 }
