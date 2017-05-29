@@ -43,7 +43,7 @@ public class UserController {
     @ResponseBody
     private Result<User> login(@RequestParam(value = "userId") String userId,
                                @RequestParam(value = "userPass") String userPass,
-                               @RequestParam(value = "phone") String phone) {
+                               @RequestParam(value = "phone", required = false) String phone) {
         return userService.login(userId, phone, userPass);
 
     }
