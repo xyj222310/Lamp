@@ -35,15 +35,16 @@ public class UserController {
             @RequestParam(value = "phone", required = false) String phone,
             @RequestParam(value = "mail", required = false) String mail,
             Model model) {
-        return userService.getById(userId,phone,mail);
+        return userService.getById(userId, phone, mail);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {
             "application/json; charset=utf-8"})
     @ResponseBody
     private Result<User> login(@RequestParam(value = "userId") String userId,
-                               @RequestParam(value = "userPass") String userPass) {
-        return userService.login(userId, userPass);
+                               @RequestParam(value = "userPass") String userPass,
+                               @RequestParam(value = "phone") String phone) {
+        return userService.login(userId, phone, userPass);
 
     }
 
@@ -99,7 +100,6 @@ public class UserController {
             @RequestParam(value = "sex", required = false) String sex,
             @RequestParam(value = "icon", required = false) String icon,
             @RequestParam(value = "role", required = false) String role) {
-
         return userService.addUser(new User(userId, mail, phone, userName, userPass, sex, icon, role));
 
     }

@@ -22,10 +22,10 @@
                 user_id = #{userId}
             </if>
             <if test="mail!=null and mail!=''">
-                AND mail = #{mail}
+                OR mail = #{mail}
             </if>
             <if test="phone!=null and phone!=''">
-                AND phone = #{phone}
+                OR phone = #{phone}
             </if>
         </where>
     </select>

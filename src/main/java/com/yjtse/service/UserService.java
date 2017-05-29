@@ -32,10 +32,9 @@ public class UserService {
         return new Result<>(false, "you have to input sth");
     }
 
-    public Result login(String userId, String userPass) {
-
+    public Result<User> login(String userId, String phone, String userPass) {
         if (userId != null) {
-            User user = userDao.findById(userId, null, null);
+            User user = userDao.findById(userId, phone, null);
             if (userPass != null && userPass.equals(user.getUserPass())) {
                 return new Result<>(true, user);
             }
