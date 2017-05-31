@@ -91,9 +91,9 @@ public class SocketController {
      * @param localDateTime
      * @return
      */
-    @RequestMapping(value = "/updateCron", method = RequestMethod.POST, produces = {
-            "application/json; charset=utf-8"})
-    @ResponseBody
+//    @RequestMapping(value = "/updateCron", method = RequestMethod.POST, produces = {
+//            "application/json; charset=utf-8"})
+//    @ResponseBody
     private Result timer(
             @RequestParam(value = "localDateTime") String localDateTime,
             @RequestParam(value = "statusTobe") String statusTobe,
