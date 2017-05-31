@@ -1,25 +1,18 @@
 package com.yjtse.service.job;
 
 import com.yjtse.dto.ConnectionPool;
-import com.yjtse.entity.Socket;
+import com.yjtse.entity.Cron;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 
 public class MyJob implements Job {
-
-//    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-//    @Autowired
-//    private SocketDao socketDao;
-
-//    @Resource
-//    private SocketService socketService;
 
     private int timeout;
 
@@ -35,11 +28,12 @@ public class MyJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap map = jobExecutionContext.getJobDetail().getJobDataMap();
         if (map != null) {
-            Socket socket = (Socket) map.get("socket");
-            if (socket.getSocketId() != null) {
+            Cron cron = (Cron) map.get("cron");
+            if (!StringUtils.isEmpty(cron.getSocketId())) {
                 /**
                  * 想不出更好的办法了，直接jdbc，用古老的办法执行update吧
                  */
+                System.out.println(LocalDateTime.now() + ": job 1 doing something...");
                 ConnectionPool connectionPool = new ConnectionPool(
                         "com.mysql.jdbc.Driver",
                         "jdbc:mysql://127.0.0.1:3306/socketlamp?useUnicode=true&characterEncoding=utf8",
@@ -56,8 +50,8 @@ public class MyJob implements Job {
                     //预编译sql语句
                     PreparedStatement preparedStatement = connection.prepareStatement(sql);
                     //先对应SQL语句，给SQL语句传递参数
-                    preparedStatement.setString(1, socket.getStatusTobe());
-                    preparedStatement.setString(2, socket.getSocketId());
+                    preparedStatement.setString(1, cron.getStatusTobe());
+                    preparedStatement.setString(2, cron.getSocketId());
                     //执行SQL语句
                     preparedStatement.execute();
                     connection.close();
@@ -69,12 +63,10 @@ public class MyJob implements Job {
                      * 当真正执行时，这些参数会加载在SQL语句中，把SQL语句拼接完整才去执行。
                      * 这样就会减少对数据库的操作
                      */
+                    System.out.println(LocalDateTime.now() + ": job 1 done ");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                System.out.println(LocalDateTime.now() + ": job 1 doing something...");
-//                System.out.println(map.getString("socket"));
             }
 
         }

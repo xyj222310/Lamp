@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjtse.dao.CronDao">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+
+    <select id="findById" parameterType="Integer" resultType="com.yjtse.entity.Cron">
+        SELECT
+        id,
+        socket_id,
+        owner_id,
+        cron,
+        status_tobe
+        FROM
+        business_cron
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="findAllBySocketId" parameterType="String" resultType="com.yjtse.entity.Cron">
+        SELECT
+        id,
+        socket_id,
+        owner_id,
+        cron,
+        status_tobe
+        FROM
+        business_cron
+        WHERE
+        socket_id = #{socketId}
+    </select>
+
+    <select id="findAllByOwnerId" parameterType="String" resultType="com.yjtse.entity.Cron">
+        SELECT
+        id,
+        socket_id,
+        owner_id,
+        cron,
+        status_tobe
+        FROM
+        business_cron
+        WHERE
+        owner_id = #{ownerId}
+    </select>
+
+    <insert id="addCron" parameterType="com.yjtse.entity.Cron" useGeneratedKeys="true" keyProperty="id">
+        insert into business_cron(
+        socket_id,
+        owner_id,
+        cron,
+        status_tobe)
+        values (#{socketId},#{ownerId},#{cron},#{statusTobe})
+    </insert>
+
+    <update id="updateCron" parameterType="com.yjtse.entity.Cron">
+        UPDATE business_cron
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ownerId!=null and ownerId!=''">
+                owner_id=#{ownerId},
+            </if>
+            <if test="socketId!=null and socketId!=''">
+                socket_id=#{socketId},
+            </if>
+            <if test="cron!=null and cron!=''">
+                cron=#{cron},
+            </if>
+            <if test="statusTobe!=null and statusTobe!=''">
+                status_tobe=#{statusTobe}
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from
+        business_cron
+        where id =#{id}
+    </delete>
+    <!-- 安全起见，数据库开启了非主键条件无法update和delete操作,但是代码操作却可以-->
+    <delete id="deleteBySocketId" parameterType="String">
+    delete from
+    business_cron
+    where socket_id =#{socketId}
+    </delete>
+    <delete id="deleteByOwnerId" parameterType="String">
+    delete from
+    business_cron
+    where owner_id =#{ownerId}
+    </delete>
+
+</mapper>

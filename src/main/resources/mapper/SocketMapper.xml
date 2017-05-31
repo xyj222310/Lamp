@@ -37,7 +37,7 @@
           owner_id = #{userId}
     </select>
 
-    <insert id="addSocket" parameterType="com.yjtse.entity.Socket">
+    <insert id="addSocket" parameterType="com.yjtse.entity.Socket" useGeneratedKeys="true" keyProperty="id">
         insert into business_socket(
         socket_id,
         socket_name,

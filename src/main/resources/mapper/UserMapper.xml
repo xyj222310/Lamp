@@ -30,7 +30,7 @@
         </where>
     </select>
 
-    <insert id="addUser" parameterType="com.yjtse.entity.User">
+    <insert id="addUser" parameterType="com.yjtse.entity.User" useGeneratedKeys="true" keyProperty="id">
         insert into sys_user(
         user_id,
         mail,

@@ -82,7 +82,7 @@ public class SocketService {
                     new Result<>(true, "Deleted!") :
                     new Result(false, "Failed!");
         }
-        return (new Result<>(true, "not permmited to this"));
+        return (new Result<>(false, "not permmited to this"));
     }
 
     /**
@@ -93,10 +93,6 @@ public class SocketService {
      * @return
      */
     public Result updateTimerParams(Socket socket, LocalDateTime localDateTime) {
-
-//        localDateTime = LocalDateTime.now().plusSeconds(10); //测试一下设置为30s之后
-//        localDateTime = localDateTime.minusSeconds(1);
-//        System.out.println(LocalDateTime.now());
         /**
          * 把时间转为cron参数
          */
@@ -124,41 +120,35 @@ public class SocketService {
             try {
                 Thread.sleep(500);
                 System.out.println("【modify job 】");
-
                 /**
                  * 给任务传参数
-                 */
-
-                Scheduler scheduler = quartzManager.getSchedulerFactory().getScheduler();
-                /**
                  * 改之前先判断job是否存在
                  */
-                if (!scheduler.checkExists(JobKey.jobKey(socket.getSocketId() + JOB_NAME, JOB_GROUP_NAME))) {
+                Scheduler scheduler = quartzManager.getSchedulerFactory().getScheduler();
+
+                if (!scheduler.checkExists(JobKey.jobKey(JOB_NAME + socket.getSocketId(), JOB_GROUP_NAME))) {
                     quartzManager.addJob(
-                            socket.getSocketId() + JOB_NAME,
+                            JOB_NAME + socket.getSocketId(),
                             JOB_GROUP_NAME,
-                            socket.getSocketId() + TRIGGER_NAME,
+                            TRIGGER_NAME + socket.getSocketId(),
                             TRIGGER_GROUP_NAME,
                             MyJob.class,
                             //"0/15 * * * * ?");
                             "0 0 0 1 1 ? 2030",
-                            socket,
-                            socketDao);
+                            socket);
                 }
-
                 /**
                  * 修改定时的时间
                  */
                 Thread.sleep(500);
                 quartzManager.modifyJobTime(
-                        socket.getSocketId() + JOB_NAME,
+                        JOB_NAME + socket.getSocketId(),
                         JOB_GROUP_NAME,
-                        socket.getSocketId() + TRIGGER_NAME,
+                        TRIGGER_NAME + socket.getSocketId(),
                         TRIGGER_GROUP_NAME,
                         valueBuilder.toString(),
                         socket);
 //            QuartzManager.startJobs();
-
                 return new Result(true, "success");
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -170,7 +160,5 @@ public class SocketService {
 
         } else return new Result(false, "check your permission!");
     }
-
-
 }
 

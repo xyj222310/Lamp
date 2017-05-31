@@ -59,7 +59,7 @@ public class SocketController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = {
             "application/json; charset=utf-8"})
     @ResponseBody
-    private Result<Socket> updateById(
+    private Result updateById(
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "socketName", required = false) String socketName,
             @RequestParam(value = "ownerId") String ownerId,
@@ -94,7 +94,7 @@ public class SocketController {
     @RequestMapping(value = "/updateCron", method = RequestMethod.POST, produces = {
             "application/json; charset=utf-8"})
     @ResponseBody
-    private Result<Socket> timer(
+    private Result timer(
             @RequestParam(value = "localDateTime") String localDateTime,
             @RequestParam(value = "statusTobe") String statusTobe,
             @RequestParam(value = "socketId") String socketId,

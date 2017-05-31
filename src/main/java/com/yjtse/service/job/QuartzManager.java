@@ -30,7 +30,7 @@ public class QuartzManager {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void addJob(String jobName, String jobGroupName,
-                              String triggerName, String triggerGroupName, Class jobClass, String cron, Object o, SocketDao socketDao) {
+                              String triggerName, String triggerGroupName, Class jobClass, String cron, Object o) {
         try {
             Scheduler sched = schedulerFactory.getScheduler();
             // 任务名，任务组，任务执行类
@@ -45,7 +45,7 @@ public class QuartzManager {
             triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron));
             // 创建Trigger对象
             CronTrigger trigger = (CronTrigger) triggerBuilder.build();
-            jobDetail.getJobDataMap().put("socket", o);
+            jobDetail.getJobDataMap().put("cron", o);
 //            sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socketService", socketDao.getClass());
             // 调度容器设置JobDetail和Trigger
             sched.scheduleJob(jobDetail, trigger);
@@ -89,7 +89,7 @@ public class QuartzManager {
                 triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron));
                 // 创建Trigger对象
                 trigger = (CronTrigger) triggerBuilder.build();
-                sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socket", object);
+                sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("cron", object);
 //                sched.getJobDetail(JobKey.jobKey(jobName, jobGroupName)).getJobDataMap().put("socketService", socketService);
                 // 方式一 ：修改一个任务的触发时间
                 sched.rescheduleJob(triggerKey, trigger);
