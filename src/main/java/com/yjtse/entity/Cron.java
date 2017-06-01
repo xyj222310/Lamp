@@ -17,15 +17,26 @@ public class Cron {
 
     private String statusTobe; //定时设定的状态
 
-    public Cron(Integer id, String socketId, String ownerId, String cron, String statusTobe) {
+    private String available;
+
+    public Cron(Integer id, String socketId, String ownerId, String cron, String statusTobe, String available) {
         this.id = id;
         this.socketId = socketId;
         this.ownerId = ownerId;
         this.cron = cron;
         this.statusTobe = statusTobe;
+        this.available = available;
     }
 
     public Cron() {
+    }
+
+    public String getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(String available) {
+        this.available = available;
     }
 
     public Integer getId() {

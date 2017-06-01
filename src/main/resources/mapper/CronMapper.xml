@@ -11,7 +11,8 @@
         socket_id,
         owner_id,
         cron,
-        status_tobe
+        status_tobe,
+        available
         FROM
         business_cron
         WHERE
@@ -24,7 +25,8 @@
         socket_id,
         owner_id,
         cron,
-        status_tobe
+        status_tobe,
+        available
         FROM
         business_cron
         WHERE
@@ -37,7 +39,8 @@
         socket_id,
         owner_id,
         cron,
-        status_tobe
+        status_tobe,
+        available
         FROM
         business_cron
         WHERE
@@ -49,8 +52,9 @@
         socket_id,
         owner_id,
         cron,
-        status_tobe)
-        values (#{socketId},#{ownerId},#{cron},#{statusTobe})
+        status_tobe,
+        available)
+        values (#{socketId},#{ownerId},#{cron},#{statusTobe},#{available})
     </insert>
 
     <update id="updateCron" parameterType="com.yjtse.entity.Cron">
@@ -66,7 +70,10 @@
                 cron=#{cron},
             </if>
             <if test="statusTobe!=null and statusTobe!=''">
-                status_tobe=#{statusTobe}
+                status_tobe=#{statusTobe},
+            </if>
+            <if test="statusTobe!=null and statusTobe!=''">
+                available=#{available}
             </if>
         </trim>
         WHERE

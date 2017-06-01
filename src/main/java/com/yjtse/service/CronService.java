@@ -89,7 +89,9 @@ public class CronService {
                 && !StringUtils.isEmpty(cron.getSocketId())) {
             if (cronDao.addCron(cron) == 1) {
                 cron.setId(cron.getId());
-                updateSchedule(cron);
+                if ("1".equals(cron.getAvailable())) {
+                    return updateSchedule(cron);
+                }
             }
             return new Result<>(false, "update DB error ");
         } else return new Result(false, "check your permission!");
@@ -107,11 +109,13 @@ public class CronService {
                     if (cronDao.updateCron(cron) != 1) {
                         return new Result<>(false, "DB Update failed!");
                     }
-                    return updateSchedule(cron);
+                    if ("1".equals(cron.getAvailable())) {
+                        return updateSchedule(cron);
+                    }
                 }
             } catch (Exception e) {
-                cronDao.deleteById(cron.getId());
-                return new Result<>(false, "schedule does nt exist,timer will be delete");
+//                cronDao.deleteById(cron.getId());
+                return new Result<>(false, "operation failed" + e);
             }
             return new Result<>(false, "Operation Failed");
         }

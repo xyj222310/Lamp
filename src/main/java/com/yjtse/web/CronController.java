@@ -52,12 +52,14 @@ public class CronController {
             @RequestParam(value = "socketId") String socketId,
             @RequestParam(value = "ownerId") String ownerId,
             @RequestParam(value = "cron") String cron,
-            @RequestParam(value = "statusTobe") String statusTobe) {
+            @RequestParam(value = "statusTobe") String statusTobe,
+            @RequestParam(value = "available") String available) {
         Cron cron1 = new Cron();
         cron1.setSocketId(socketId);
         cron1.setOwnerId(ownerId);
         cron1.setCron(cron);
         cron1.setStatusTobe(statusTobe);
+        cron1.setAvailable(available);
         return cronService.addCron(cron1);
     }
 
@@ -69,13 +71,15 @@ public class CronController {
             @RequestParam(value = "socketId", required = false) String socketId,
             @RequestParam(value = "ownerId", required = false) String ownerId,
             @RequestParam(value = "statusTobe") String statusTobe,
-            @RequestParam(value = "cron") String cron) {
+            @RequestParam(value = "cron") String cron,
+            @RequestParam(value = "available") String available) {
         Cron cron1 = new Cron();
         cron1.setId(Integer.valueOf(id));
         cron1.setSocketId(socketId);
         cron1.setOwnerId(ownerId);
         cron1.setStatusTobe(statusTobe);
         cron1.setCron(cron);
+        cron1.setAvailable(available);
         return cronService.updateCron(cron1);
     }
 
