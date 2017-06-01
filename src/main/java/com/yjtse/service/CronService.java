@@ -109,15 +109,12 @@ public class CronService {
                     if (cronDao.updateCron(cron) != 1) {
                         return new Result<>(false, "DB Update failed!");
                     }
-                    if ("1".equals(cron.getAvailable())) {
-                        return updateSchedule(cron);
-                    }
+                    return updateSchedule(cron);
                 }
             } catch (Exception e) {
 //                cronDao.deleteById(cron.getId());
                 return new Result<>(false, "operation failed" + e);
             }
-            return new Result<>(false, "Operation Failed");
         }
         return new Result<>(false, "Update Failed,Check if UR permitted to do this OP");
     }
@@ -179,32 +176,39 @@ public class CronService {
 //        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-quartz.xml");
 //        QuartzManager quartzManager = (QuartzManager) ctx.getBean("quartzManager");
         try {
-            /**
-             * 修改定时的时间
-             */
             System.out.println("update job start_______________");
             Thread.sleep(500);
             Scheduler scheduler = QuartzManager.getSchedulerFactory().getScheduler();
-            if (!scheduler.checkExists(JobKey.jobKey(JOB_NAME + cron.getId(), JOB_GROUP_NAME))) {
-                QuartzManager.addJob(
-                        JOB_NAME + cron.getId(),
-                        JOB_GROUP_NAME,
-                        TRIGGER_NAME + cron.getId(),
-                        TRIGGER_GROUP_NAME,
-                        MyJob.class,
-                        //"0/15 * * * * ?");
-                        cron.getCron(),
-                        cron);
-                System.out.println("add job end_______________");
+            if ("1".equals(cron.getAvailable())) {
+                //用户设置为启用此定时任务
+                if (!scheduler.checkExists(JobKey.jobKey(JOB_NAME + cron.getId(), JOB_GROUP_NAME))) {
+                    QuartzManager.addJob(
+                            JOB_NAME + cron.getId(),
+                            JOB_GROUP_NAME,
+                            TRIGGER_NAME + cron.getId(),
+                            TRIGGER_GROUP_NAME,
+                            MyJob.class,
+                            //"0/15 * * * * ?");
+                            cron.getCron(),
+                            cron);
+                    System.out.println("add job end_______________");
+                } else {
+                    QuartzManager.modifyJobTime(
+                            JOB_NAME + cron.getId(),
+                            JOB_GROUP_NAME,
+                            TRIGGER_NAME + cron.getId(),
+                            TRIGGER_GROUP_NAME,
+                            cron.getCron(),
+                            cron);
+                    System.out.println("update job end___________");
+                }
             } else {
-                QuartzManager.modifyJobTime(
+                QuartzManager.removeJob(
                         JOB_NAME + cron.getId(),
                         JOB_GROUP_NAME,
                         TRIGGER_NAME + cron.getId(),
-                        TRIGGER_GROUP_NAME,
-                        cron.getCron(),
-                        cron);
-                System.out.println("update job end___________");
+                        TRIGGER_GROUP_NAME);
+                System.out.println("remove job end___________");
             }
             return new Result(true, "success");
 //            QuartzManager.startJobs();
