@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: socketlamp
+-- Host: 127.0.0.1    Database: socketlamp
 -- ------------------------------------------------------
--- Server version	5.6.27
+-- Server version	5.7.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,35 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `business_cron`
+--
+
+DROP TABLE IF EXISTS `business_cron`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `business_cron` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `socket_id` varchar(50) NOT NULL COMMENT '''所属插座id''',
+  `owner_id` varchar(20) NOT NULL COMMENT '设定人',
+  `cron` varchar(45) NOT NULL DEFAULT '0 0 0 1 1 ? 2040',
+  `status_tobe` varchar(2) NOT NULL DEFAULT '0' COMMENT '定时设置的 插座状态，默认为关0',
+  `available` varchar(2) DEFAULT '-1' COMMENT '定时是否被启用',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='业务：插座定时参数表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `business_cron`
+--
+
+LOCK TABLES `business_cron` WRITE;
+/*!40000 ALTER TABLE `business_cron` DISABLE KEYS */;
+INSERT INTO `business_cron` VALUES (1,'113030102500','11303010232','00 59 10 * * ? 2017','0','0'),(2,'113030102500','11303010232','00 22 17 2 6 ? 2017','1','0'),(3,'113030102500','11303010232','00 27 17 * * ? 2017 ','1','0'),(5,'113030102500','11303010232','00 16 22 3 6 ? 2017 ','0','0');
+/*!40000 ALTER TABLE `business_cron` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `business_socket`
@@ -28,12 +57,12 @@ CREATE TABLE `business_socket` (
   `socket_name` varchar(50) DEFAULT 'tse插座' COMMENT '插座代号',
   `owner_id` varchar(20) DEFAULT '-1' COMMENT '插座所属人id:；-1代表没绑定用户',
   `status` varchar(2) DEFAULT '-1' COMMENT '开关状态：0关/1开/-1表示未使用',
-  `status_tobe` varchar(2) DEFAULT '0' COMMENT '定时设置的 插座状态，默认为关1',
+  `available` varchar(45) DEFAULT '-1' COMMENT '插座是否连接到服务器',
+  `status_tobe` varchar(2) DEFAULT '0' COMMENT '定时设置的 插座状态，默认为关0',
   `cron` varchar(50) DEFAULT '0 0 0 1 1 ? 2040' COMMENT '定时参数默认设置为无限长时间，2040年  ''0 0 0 1 1 ? 2040‘\n暂时不用这个字段',
-  `available` varchar(45) DEFAULT NULL COMMENT '插座是否连接到服务器',
   PRIMARY KEY (`id`),
   UNIQUE KEY `socket_id` (`socket_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='业务：插座信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='业务：插座信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +71,7 @@ CREATE TABLE `business_socket` (
 
 LOCK TABLES `business_socket` WRITE;
 /*!40000 ALTER TABLE `business_socket` DISABLE KEYS */;
-INSERT INTO `business_socket` VALUES (1,'113030102500','tseSocket','1103010232','1','-1','0 0 0 1 1 ? 2040',NULL),(2,'11303010260','tseSocket','1103010232','1','1','58 2 11 16 MAY ? 2017',NULL);
+INSERT INTO `business_socket` VALUES (1,'113030102500','tseSocket','11303010232','0','1','1','50 25 0 31 5 ? 2017'),(9,'113030102600','tseSocket3','11303010232','-1','-1','0','0 0 0 1 1 ? 2040'),(14,'113030102900','tseSocket','11303010232','-1','-1','0','0 0 0 1 1 ? 2040');
 /*!40000 ALTER TABLE `business_socket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +94,7 @@ CREATE TABLE `sys_user` (
   `role` varchar(10) DEFAULT '1' COMMENT '角色\n1：注册用户\n0：管理用户',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +103,7 @@ CREATE TABLE `sys_user` (
 
 LOCK TABLES `sys_user` WRITE;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
-INSERT INTO `sys_user` VALUES (1,'xyj222310','000000',NULL,NULL,NULL,NULL,NULL,NULL),(5,'sb','000000',NULL,NULL,NULL,NULL,NULL,NULL),(7,'sb2','000000',NULL,NULL,NULL,NULL,NULL,NULL),(9,'11303010232','000000','xyj222310@163.com','12333333333',NULL,'male',NULL,NULL),(14,'11303010229','000000',NULL,NULL,NULL,NULL,NULL,NULL),(15,'11303010231','000000',NULL,NULL,NULL,NULL,NULL,NULL),(17,'11303010203','000000',NULL,NULL,NULL,NULL,NULL,NULL),(18,'11303010288','000000',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `sys_user` VALUES (1,'xyj222310','000000',NULL,'17700000000',NULL,NULL,NULL,NULL),(9,'11303010232','000000','xyj222310@163.com','15683214577',NULL,'male',NULL,NULL),(20,'tse','000000',NULL,NULL,NULL,NULL,NULL,NULL),(22,'15683214574','111111',NULL,'15683214574',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -87,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-24 22:59:10
+-- Dump completed on 2017-06-03  0:37:32
