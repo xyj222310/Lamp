@@ -89,9 +89,7 @@ public class CronService {
                 && !StringUtils.isEmpty(cron.getSocketId())) {
             if (cronDao.addCron(cron) == 1) {
                 cron.setId(cron.getId());
-                if ("1".equals(cron.getAvailable())) {
-                    return updateSchedule(cron);
-                }
+                return updateSchedule(cron);
             }
             return new Result<>(false, "update DB error ");
         } else return new Result(false, "check your permission!");

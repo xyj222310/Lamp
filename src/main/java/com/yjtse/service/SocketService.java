@@ -87,6 +87,7 @@ public class SocketService {
 
     /**
      * 设置插座的定时参数以及定时操作（插座将要变为什么状态?）
+     * 废弃了
      *
      * @param socket
      * @param localDateTime
