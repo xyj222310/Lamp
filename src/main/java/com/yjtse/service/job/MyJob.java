@@ -54,6 +54,16 @@ public class MyJob implements Job {
                     preparedStatement.setString(2, cron.getSocketId());
                     //执行SQL语句
                     preparedStatement.execute();
+                    System.out.println(LocalDateTime.now() + ": job 1 set socketStatus done ");
+                    String sql2 = "update business_cron set " +
+                            "`available`= ? " +
+                            "WHERE " +
+                            "`id`= ?";
+                    PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+                    preparedStatement2.setString(1, "0");
+                    preparedStatement2.setInt(2, cron.getId());
+                    preparedStatement2.execute();
+                    System.out.println(LocalDateTime.now() + ": job 1 set timer available done ");
                     connection.close();
                     /**
                      * prepareStatement这个方法会将SQL语句加载到驱动程序conn集成程序中，但是并不直接执行
