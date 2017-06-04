@@ -76,6 +76,7 @@ public class DeviceSocketController {
 
                     }
                 } catch (IOException e) {
+                    System.out.println("receive Exception " + e + "---------------------------");
                     socketServerUtils.SendDataToSensor("0");
                     if (socket != null && socket.getSocketId() != null) {
                         Socket result = socketService.findById(socket.getSocketId()).getData();
@@ -93,6 +94,7 @@ public class DeviceSocketController {
                 if (socket != null && socket.getSocketId() != null) {
                     Socket result = socketService.findById(socket.getSocketId()).getData();
                     result.setAvailable("0");
+                    System.out.println("available = 0---------------------------");
                     socketService.updateSocket(result);
                 }
             }
