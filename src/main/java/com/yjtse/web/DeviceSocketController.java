@@ -76,7 +76,12 @@ public class DeviceSocketController {
 
                     }
                 } catch (IOException e) {
-                    socketServerUtils.SendDataToSensor("Data resolve Failed！");
+                    socketServerUtils.SendDataToSensor("0");
+                    if (socket != null && socket.getSocketId() != null) {
+                        Socket result = socketService.findById(socket.getSocketId()).getData();
+                        result.setAvailable("0");
+                        socketService.updateSocket(result);
+                    }
                     SocketServerUtils.getInstance().getMessageListener().OnSendFail();
                     e.printStackTrace();
                 }
@@ -87,7 +92,7 @@ public class DeviceSocketController {
                 System.out.println("receive failed---------------------------");
                 if (socket != null && socket.getSocketId() != null) {
                     Socket result = socketService.findById(socket.getSocketId()).getData();
-                    result.setAvailable("-1");
+                    result.setAvailable("0");
                     socketService.updateSocket(result);
                 }
             }
