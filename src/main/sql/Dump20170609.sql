@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: socketlamp
+-- Host: localhost    Database: socketlamp
 -- ------------------------------------------------------
--- Server version	5.7.15
+-- Server version	5.6.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,11 @@ CREATE TABLE `business_cron` (
   `status_tobe` varchar(2) NOT NULL DEFAULT '0' COMMENT '定时设置的 插座状态，默认为关0',
   `available` varchar(2) DEFAULT '-1' COMMENT '定时是否被启用',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `socketId_idx` (`socket_id`),
+  KEY `ownerId_idx` (`owner_id`),
+  CONSTRAINT `ownerId` FOREIGN KEY (`owner_id`) REFERENCES `sys_user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `socketId` FOREIGN KEY (`socket_id`) REFERENCES `business_socket` (`socket_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='业务：插座定时参数表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,7 +44,7 @@ CREATE TABLE `business_cron` (
 
 LOCK TABLES `business_cron` WRITE;
 /*!40000 ALTER TABLE `business_cron` DISABLE KEYS */;
-INSERT INTO `business_cron` VALUES (1,'113030102500','11303010232','00 59 10 * * ? 2017','0','0'),(2,'113030102500','11303010232','00 22 17 2 6 ? 2017','1','0'),(3,'113030102500','11303010232','00 27 17 * * ? 2017 ','1','0'),(5,'113030102500','11303010232','00 16 22 3 6 ? 2017 ','0','0');
+INSERT INTO `business_cron` VALUES (1,'113030102500','11303010232','00 14 15 8 6 ? 2017 ','0','0'),(3,'113030102500','11303010232','00 27 17 * * ? 2017 ','1','0'),(5,'113030102500','11303010232','00 08 01 8 6 ? 2017 ','0','0');
 /*!40000 ALTER TABLE `business_cron` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,8 +65,10 @@ CREATE TABLE `business_socket` (
   `status_tobe` varchar(2) DEFAULT '0' COMMENT '定时设置的 插座状态，默认为关0',
   `cron` varchar(50) DEFAULT '0 0 0 1 1 ? 2040' COMMENT '定时参数默认设置为无限长时间，2040年  ''0 0 0 1 1 ? 2040‘\n暂时不用这个字段',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `socket_id` (`socket_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='业务：插座信息表';
+  UNIQUE KEY `socket_id` (`socket_id`),
+  KEY `owenrId_idx` (`owner_id`),
+  CONSTRAINT `owenrId` FOREIGN KEY (`owner_id`) REFERENCES `sys_user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='业务：插座信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +77,7 @@ CREATE TABLE `business_socket` (
 
 LOCK TABLES `business_socket` WRITE;
 /*!40000 ALTER TABLE `business_socket` DISABLE KEYS */;
-INSERT INTO `business_socket` VALUES (1,'113030102500','tseSocket','11303010232','0','1','1','50 25 0 31 5 ? 2017'),(9,'113030102600','tseSocket3','11303010232','-1','-1','0','0 0 0 1 1 ? 2040'),(14,'113030102900','tseSocket','11303010232','-1','-1','0','0 0 0 1 1 ? 2040');
+INSERT INTO `business_socket` VALUES (1,'113030102500','tseSocket','11303010232','0','0','0','50 25 0 31 5 ? 2017'),(9,'113030102600','tseSocket3','11303010232','-1','0','0','0 0 0 1 1 ? 2040');
 /*!40000 ALTER TABLE `business_socket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +100,7 @@ CREATE TABLE `sys_user` (
   `role` varchar(10) DEFAULT '1' COMMENT '角色\n1：注册用户\n0：管理用户',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +109,7 @@ CREATE TABLE `sys_user` (
 
 LOCK TABLES `sys_user` WRITE;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
-INSERT INTO `sys_user` VALUES (1,'xyj222310','000000',NULL,'17700000000',NULL,NULL,NULL,NULL),(9,'11303010232','000000','xyj222310@163.com','15683214577',NULL,'male',NULL,NULL),(20,'tse','000000',NULL,NULL,NULL,NULL,NULL,NULL),(22,'15683214574','111111',NULL,'15683214574',NULL,NULL,NULL,NULL);
+INSERT INTO `sys_user` VALUES (1,'xyj222310','000000',NULL,'17700000000',NULL,NULL,NULL,NULL),(9,'11303010232','000000','xyj222310@163.com','15683214577',NULL,'male',NULL,NULL),(23,'15923136327','000000',NULL,'15923136327',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -116,4 +122,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-03  0:37:32
+-- Dump completed on 2017-06-09 14:34:24
